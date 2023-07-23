@@ -1,8 +1,12 @@
 import Head from "./head";
 import "./styles/globals.css";
-import { Inter } from "next/font/google";
+import { Varela_Round } from "next/font/google";
 
-const inter = Inter({ subsets: ["latin"] });
+const varela = Varela_Round({
+  weight: '400',
+  subsets: ['latin'],
+  display: 'swap',
+})
 
 export const metadata = {
   title: "Create Next App",
@@ -13,7 +17,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <Head />
-      <body className={inter.className}>{children}</body>
+      <body className={varela.className}>{children}</body>
     </html>
   );
 }

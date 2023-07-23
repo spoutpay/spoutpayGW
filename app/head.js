@@ -9,7 +9,6 @@ export default function Head() {
         name="description"
         content="Web site created using create-react-app"
       />
-      {/* <link rel="stylesheet" href="https://use.typekit.net/gnc1lsn.css" /> */}
     </>
   );
 }
