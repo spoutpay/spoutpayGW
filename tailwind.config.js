@@ -21,7 +21,7 @@ module.exports = {
       //   "Hoss": [hoss - round, sans - serif],
       // },
       width: {
-        sidebar: "30%",
+        sidebar: "25%",
       },
     },
   },
