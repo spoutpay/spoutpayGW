@@ -17,7 +17,7 @@ export default function Status({ message }) {
             <Button
               text="Done"
               variant="tulip"
-              onClick={() => router.refresh()}
+              onClick={() => router.push("/checkout")}
             />
           </div>
         </>
@@ -30,7 +30,7 @@ export default function Status({ message }) {
             <Button
               text="Done"
               variant="tulip"
-              onClick={() => router.refresh()}
+              onClick={() => router.push("/checkout")}
             />
           </div>
         </>

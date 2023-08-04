@@ -17,11 +17,9 @@ module.exports = {
         tulip: "#77C485",
         body: "#FFFFFFD6",
       },
-      // fontFamily: {
-      //   "Hoss": [hoss - round, sans - serif],
-      // },
       width: {
         sidebar: "25%",
+        aside: "15%",
       },
     },
   },

@@ -7,6 +7,7 @@ import OTPInput from "react-otp-input";
 import AppData from "../../config/appData.json";
 import axios from "axios";
 import OtpVerify from "./OtpVerify";
+import Upsl from "./Upsl";
 
 export default function CardPin({ cardProps }) {
   const amount = "80";
@@ -20,6 +21,13 @@ export default function CardPin({ cardProps }) {
   const phoneNum = "08103327651";
   const currency = "NGN";
   const name = "Onome Ofogba";
+  let offset = new Date().getTimezoneOffset();
+  let w = window.innerWidth;
+  let h = window.innerHeight;
+  let userLang = navigator.language;
+  let depth = screen.colorDepth;
+  let agent = navigator.userAgent;
+  let java = navigator.javaEnabled();
 
   const cleanedExpDate = expDate?.replace(/\s|\/+/g, "");
   const cleanedPan = pan?.replace(/\s|\/+/g, "");
@@ -62,9 +70,25 @@ export default function CardPin({ cardProps }) {
 
   const initiateCardTransaction = async (data) => {
     const endpoint = AppData.BASE_URL + "interswitch/access";
+    // const endpoint =
+    //   "https://8bc2-2-31-148-147.ngrok-free.app/api/v1/upsl/process";
+
+    const requestData = {
+      data,
+      extra: {
+        browserColorDepth: depth,
+        browserLanguage: userLang,
+        browserScreenHeight: h,
+        browserScreenWidth: w,
+        browserTZ: offset,
+        browserUserAgent: agent,
+        browserJavaEnabled: java,
+      },
+    };
 
     try {
       setLoading(true);
+      // console.log("requet data", requestData)
       const response = await axios.post(endpoint, data, {
         headers: {
           "Content-Type": "application/json",
@@ -72,6 +96,7 @@ export default function CardPin({ cardProps }) {
       });
 
       setResponseData(response.data);
+      console.log(response.data);
       setIsValidateOtp(true);
     } catch (error) {
       console.error("Error:", error.message);
@@ -115,7 +140,9 @@ export default function CardPin({ cardProps }) {
         </form>
       ) : (
         <OtpVerify response={responseData.data} />
+        // isValidateOtp && <Upsl response={responseData}/>
       )}
+  
     </div>
   );
 }

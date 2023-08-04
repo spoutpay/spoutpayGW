@@ -36,6 +36,7 @@ export default function OtpVerify({ response }) {
   });
 
   const confirmOtp = async (data) => {
+    console.log("zjfkjdj ", data);
     const endpoint = AppData.BASE_URL + "interswitch/otp";
 
     try {
