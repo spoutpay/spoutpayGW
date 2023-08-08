@@ -15,7 +15,7 @@ const Button = ({ text, onClick, variant }) => {
   return (
     <button
       onClick={onClick}
-      className={`px-4 py-3 w-full rounded text-white font-bold ${getButtonStyle()} focus:outline-none focus:shadow-outline`}
+      className={`px-4 py-3 w-full text-xs md:text-sm rounded text-white font-bold ${getButtonStyle()} focus:outline-none focus:shadow-outline`}
     >
       {text}
     </button>

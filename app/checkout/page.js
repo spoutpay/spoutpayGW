@@ -1,5 +1,7 @@
 "use client";
 
+import { updateCardData } from "../redux/features/cardSlice";
+import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -15,7 +17,7 @@ import Button from "@/app/components/Button";
 import CardPin from "./card/CardPin";
 
 const inputClassNames =
-  "w-full border px-2.5 pt-6 pb-2.5 rounded text-sm text-gray-700 leading-tight focus:outline-none focus:shadow-outline";
+  "w-full border px-2.5 pt-6 pb-2.5 rounded text-xs md:text-sm text-gray-700 leading-tight focus:outline-none focus:shadow-outline";
 
 const labelClassName =
   "block text-gray-700 mb-2 absolute start-2.5 top-2 text-xs uppercase";
@@ -27,6 +29,7 @@ const imageSrc = {
 };
 
 export default function Checkout() {
+  const dispatch = useDispatch();
   const amount = 100;
   const [loading, setLoading] = useState(false);
   const [cardNumber, setCardNumber] = useState("");
@@ -84,6 +87,7 @@ export default function Checkout() {
       setLoading(true);
       await new Promise((resolve) => setTimeout(resolve, 1500));
       setCardData(data);
+      dispatch(updateCardData(data));
       setEnterpin(true);
     } catch (error) {
       console.error("Payment processing error:", error);
@@ -173,7 +177,7 @@ export default function Checkout() {
           />
         </form>
       ) : (
-        <CardPin cardProps={cardData} />
+        <CardPin />
       )}
     </div>
   );

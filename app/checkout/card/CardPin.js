@@ -1,3 +1,6 @@
+"use client"
+
+import { useSelector } from "react-redux";
 import Button from "@/app/components/Button";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -9,14 +12,15 @@ import axios from "axios";
 import OtpVerify from "./OtpVerify";
 import Upsl from "./Upsl";
 
-export default function CardPin({ cardProps }) {
+export default function CardPin() {
+  const cardInfo = useSelector((state) => state.card.value.cardData)
   const amount = "80";
   const [loading, setLoading] = useState(false);
   const [otp, setOtp] = useState("");
   const [cardData, setCardData] = useState({});
   const [isValidateOtp, setIsValidateOtp] = useState(false);
   const [responseData, setResponseData] = useState({});
-  const { pan, expDate, cvv } = cardProps;
+  const { pan, expDate, cvv } = cardInfo;
   const email = "onomeofogba@gmail.com";
   const phoneNum = "08103327651";
   const currency = "NGN";
@@ -69,8 +73,8 @@ export default function CardPin({ cardProps }) {
   }, []);
 
   const initiateCardTransaction = async (data) => {
-    // const endpoint = AppData.BASE_URL + "interswitch/access";
-    const endpoint = "http://139.162.232.66:9000/api/v1/upsl/process";
+    const endpoint = AppData.BASE_URL + "interswitch/access";
+    // const endpoint = "http://139.162.232.66:9000/api/v1/upsl/process";
 
     const requestData = {
       data,
@@ -87,7 +91,7 @@ export default function CardPin({ cardProps }) {
 
     try {
       setLoading(true);
-      const response = await axios.post(endpoint, requestData, {
+      const response = await axios.post(endpoint, data, {
         headers: {
           // Accept: "application/json",
           "Content-Type": "application/json",
@@ -139,8 +143,8 @@ export default function CardPin({ cardProps }) {
           </div>
         </form>
       ) : (
-        // <OtpVerify response={responseData.data} />
-        isValidateOtp && <Upsl response={responseData} />
+        <OtpVerify response={responseData.data} />
+        // isValidateOtp && <Upsl response={responseData} />
       )}
     </div>
   );
