@@ -16,7 +16,7 @@ export default function CardPin({ cardProps }) {
   const [cardData, setCardData] = useState({});
   const [isValidateOtp, setIsValidateOtp] = useState(false);
   const [responseData, setResponseData] = useState({});
-  const { pan, expDate, cvv } = cardData;
+  const { pan, expDate, cvv } = cardProps;
   const email = "onomeofogba@gmail.com";
   const phoneNum = "08103327651";
   const currency = "NGN";
@@ -69,9 +69,8 @@ export default function CardPin({ cardProps }) {
   }, []);
 
   const initiateCardTransaction = async (data) => {
-    const endpoint = AppData.BASE_URL + "interswitch/access";
-    // const endpoint =
-    //   "https://8bc2-2-31-148-147.ngrok-free.app/api/v1/upsl/process";
+    // const endpoint = AppData.BASE_URL + "interswitch/access";
+    const endpoint = "http://139.162.232.66:9000/api/v1/upsl/process";
 
     const requestData = {
       data,
@@ -88,20 +87,21 @@ export default function CardPin({ cardProps }) {
 
     try {
       setLoading(true);
-      // console.log("requet data", requestData)
-      const response = await axios.post(endpoint, data, {
+      const response = await axios.post(endpoint, requestData, {
         headers: {
+          // Accept: "application/json",
           "Content-Type": "application/json",
         },
       });
-
+      console.log("data", response);
       setResponseData(response.data);
-      console.log(response.data);
       setIsValidateOtp(true);
     } catch (error) {
       console.error("Error:", error.message);
+      console.log("data error", error);
     } finally {
       setLoading(false);
+      console.log("finished loading");
     }
   };
 
@@ -139,10 +139,9 @@ export default function CardPin({ cardProps }) {
           </div>
         </form>
       ) : (
-        <OtpVerify response={responseData.data} />
-        // isValidateOtp && <Upsl response={responseData}/>
+        // <OtpVerify response={responseData.data} />
+        isValidateOtp && <Upsl response={responseData} />
       )}
-  
     </div>
   );
 }
