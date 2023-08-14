@@ -2,6 +2,7 @@
 import ButtonWithIcon from "@/app/components/Admin/ButtonWithIcon";
 import Dropdown from "@/app/components/Admin/DropdownComponent";
 import InputWithIcon from "@/app/components/Admin/InputWithIcon";
+import { Icon } from "@iconify/react";
 import React, { useState } from "react";
 import { useTable } from "react-table";
 
@@ -108,9 +109,9 @@ const Transaction = () => {
 
 const columns = [
   {
-    Header: <input type="checkbox" />,
+    Header: <Icon icon="system-uicons:checkbox-empty" width={30} />,
     accessor: "checkbox",
-    Cell: ({ row }) => <input type="checkbox" />,
+    Cell: ({ row }) => <Icon icon="system-uicons:checkbox-empty" width={30} />,
   },
   {
     Header: "Customer Id/Email",
@@ -147,6 +148,13 @@ const columns = [
   {
     Header: "Download",
     accessor: "download",
+    Cell: ({ row }) => (
+      <div className="flex items-center gap-3">
+        {" "}
+        <Icon icon="ic:baseline-download" color="#0981fd" width={25} />{" "}
+        <Icon icon="icomoon-free:bin" width={25} />{" "}
+      </div>
+    ),
   },
 ];
 
@@ -156,165 +164,225 @@ const data = [
     channel: "Online",
     ammount: "$100",
     receipt_number: "12345",
-    status: "Completed",
+    status: (
+      <div className="flex items-center ">
+        <Icon icon="radix-icons:dot-filled" color="#179800" width={25} />
+        <p>Successful</p>
+      </div>
+    ),
     payment_page: "PaymentPage1",
     terminal_id: "T123",
     date: "2023-08-13 10:00 AM",
-    download: "Link1",
   },
   {
     customer_id: "customer2@example.com",
     channel: "In-Store",
     ammount: "$50",
     receipt_number: "67890",
-    status: "Pending",
+    status: (
+      <div className="flex items-center ">
+        <Icon icon="radix-icons:dot-filled" color="#179800" width={25} />
+        <p>Successful</p>
+      </div>
+    ),
     payment_page: "PaymentPage2",
     terminal_id: "T234",
     date: "2023-08-13 02:30 PM",
-    download: "Link2",
   },
   {
     customer_id: "customer3@example.com",
     channel: "Online",
     ammount: "$200",
     receipt_number: "54321",
-    status: "Completed",
+    status: (
+      <div className="flex items-center ">
+        <Icon icon="radix-icons:dot-filled" color="#FF0027" width={25} />
+        <p>Failed</p>
+      </div>
+    ),
     payment_page: "PaymentPage1",
     terminal_id: "T123",
     date: "2023-08-14 09:15 AM",
-    download: "Link3",
   },
   {
     customer_id: "customer4@example.com",
     channel: "In-Store",
     ammount: "$75",
     receipt_number: "98765",
-    status: "Pending",
+    status: (
+      <div className="flex items-center ">
+        <Icon icon="radix-icons:dot-filled" color="#8D4511" width={25} />
+        <p>Abandoned</p>
+      </div>
+    ),
     payment_page: "PaymentPage2",
     terminal_id: "T234",
     date: "2023-08-15 03:45 PM",
-    download: "Link4",
   },
   {
     customer_id: "customer5@example.com",
     channel: "Online",
     ammount: "$150",
     receipt_number: "56789",
-    status: "Completed",
+    status: (
+      <div className="flex items-center ">
+        <Icon icon="radix-icons:dot-filled" color="#A40EC7" width={25} />
+        <p>Reversed</p>
+      </div>
+    ),
     payment_page: "PaymentPage1",
     terminal_id: "T123",
     date: "2023-08-16 11:30 AM",
-    download: "Link5",
   },
   {
     customer_id: "customer1@example.com",
     channel: "Online",
     ammount: "$100",
     receipt_number: "12345",
-    status: "Completed",
+    status: (
+      <div className="flex items-center ">
+        <Icon icon="radix-icons:dot-filled" color="#A40EC7" width={25} />
+        <p>Reversed</p>
+      </div>
+    ),
     payment_page: "PaymentPage1",
     terminal_id: "T123",
     date: "2023-08-13 10:00 AM",
-    download: "Link1",
   },
   {
     customer_id: "customer2@example.com",
     channel: "In-Store",
     ammount: "$50",
     receipt_number: "67890",
-    status: "Pending",
+    status: (
+      <div className="flex items-center ">
+        <Icon icon="radix-icons:dot-filled" color="#8D4511" width={25} />
+        <p>Abandoned</p>
+      </div>
+    ),
     payment_page: "PaymentPage2",
     terminal_id: "T234",
     date: "2023-08-13 02:30 PM",
-    download: "Link2",
   },
   {
     customer_id: "customer3@example.com",
     channel: "Online",
     ammount: "$200",
     receipt_number: "54321",
-    status: "Completed",
+    status: (
+      <div className="flex items-center ">
+        <Icon icon="radix-icons:dot-filled" color="#8D4511" width={25} />
+        <p>Abandoned</p>
+      </div>
+    ),
     payment_page: "PaymentPage1",
     terminal_id: "T123",
     date: "2023-08-14 09:15 AM",
-    download: "Link3",
   },
   {
     customer_id: "customer4@example.com",
     channel: "In-Store",
     ammount: "$75",
     receipt_number: "98765",
-    status: "Pending",
+    status: (
+      <div className="flex items-center ">
+        <Icon icon="radix-icons:dot-filled" color="#FF0027" width={25} />
+        <p>Failed</p>
+      </div>
+    ),
     payment_page: "PaymentPage2",
     terminal_id: "T234",
     date: "2023-08-15 03:45 PM",
-    download: "Link4",
   },
   {
     customer_id: "customer5@example.com",
     channel: "Online",
     ammount: "$150",
     receipt_number: "56789",
-    status: "Completed",
+    status: (
+      <div className="flex items-center ">
+        <Icon icon="radix-icons:dot-filled" color="#FF0027" width={25} />
+        <p>Failed</p>
+      </div>
+    ),
     payment_page: "PaymentPage1",
     terminal_id: "T123",
     date: "2023-08-16 11:30 AM",
-    download: "Link5",
   },
   {
     customer_id: "customer1@example.com",
     channel: "Online",
     ammount: "$100",
     receipt_number: "12345",
-    status: "Completed",
+    status: (
+      <div className="flex items-center ">
+        <Icon icon="radix-icons:dot-filled" color="#179800" width={25} />
+        <p>Successful</p>
+      </div>
+    ),
     payment_page: "PaymentPage1",
     terminal_id: "T123",
     date: "2023-08-13 10:00 AM",
-    download: "Link1",
   },
   {
     customer_id: "customer2@example.com",
     channel: "In-Store",
     ammount: "$50",
     receipt_number: "67890",
-    status: "Pending",
+    status: (
+      <div className="flex items-center ">
+        <Icon icon="radix-icons:dot-filled" color="#FF0027" width={25} />
+        <p>Failed</p>
+      </div>
+    ),
     payment_page: "PaymentPage2",
     terminal_id: "T234",
     date: "2023-08-13 02:30 PM",
-    download: "Link2",
   },
   {
     customer_id: "customer3@example.com",
     channel: "Online",
     ammount: "$200",
     receipt_number: "54321",
-    status: "Completed",
+    status: (
+      <div className="flex items-center ">
+        <Icon icon="radix-icons:dot-filled" color="#FF0027" width={25} />
+        <p>Failed</p>
+      </div>
+    ),
     payment_page: "PaymentPage1",
     terminal_id: "T123",
     date: "2023-08-14 09:15 AM",
-    download: "Link3",
   },
   {
     customer_id: "customer4@example.com",
     channel: "In-Store",
     ammount: "$75",
     receipt_number: "98765",
-    status: "Pending",
+    status: (
+      <div className="flex items-center ">
+        <Icon icon="radix-icons:dot-filled" color="#FF0027" width={25} />
+        <p>Failed</p>
+      </div>
+    ),
     payment_page: "PaymentPage2",
     terminal_id: "T234",
     date: "2023-08-15 03:45 PM",
-    download: "Link4",
   },
   {
     customer_id: "customer5@example.com",
     channel: "Online",
     ammount: "$150",
     receipt_number: "56789",
-    status: "Completed",
+    status: (
+      <div className="flex items-center ">
+        <Icon icon="radix-icons:dot-filled" color="#179800" width={25} />
+        <p>Successful</p>
+      </div>
+    ),
     payment_page: "PaymentPage1",
     terminal_id: "T123",
     date: "2023-08-16 11:30 AM",
-    download: "Link5",
   },
 ];
 export default Transaction;

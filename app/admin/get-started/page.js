@@ -3,6 +3,7 @@ import Dropdown from "@/app/components/Admin/DropdownComponent";
 import ProgressBar from "@/app/components/Admin/ProgressBar";
 import { Icon } from "@iconify/react";
 import React, { useState } from "react";
+import LineChart from "./Chart";
 
 const GetStarted = () => {
   const options = [{ label: "Option 1", value: "option1" }];
@@ -121,18 +122,18 @@ const GetStarted = () => {
             <hr className="mt-3 h-[1px] bg-black" />
           </div>
 
-          <div className="mt-2 flex items-center gap-5 text-xs">
+          <div className=" flex items-center gap-5 text-xs">
             <span>
               <p className="text-[#573CEB] mb-2 "> Payouts</p>
               <p className=" text-lg font-bold">N75M</p>
             </span>
-            <span className="border-l border-black p-2">
+            <span className="border-l border-black px-2">
               <p className="text-[#573CEB] mb-2"> Next Payout</p>
               <p className=" text-lg font-bold">N0:00</p>
             </span>
-            <span className="border-l border-black p-2 ">
+            <span className="border-l border-[#E6E6E6] px-2 ">
               <p className="text-[#573CEB] mb-1"> Payment Issues</p>
-              <ul className="list-disc flex gap-7 justify-between text-xs w-full">
+              <ul className="list-disc marker:text-green-[#893704]  flex gap-7 justify-between text-xs w-full">
                 <li className="ml-3">
                   <div className="flex flex-col">
                     <p className="">2</p>
@@ -155,6 +156,10 @@ const GetStarted = () => {
             </span>
           </div>
         </div>
+      </div>
+
+      <div>
+        <LineChart />
       </div>
     </div>
   );

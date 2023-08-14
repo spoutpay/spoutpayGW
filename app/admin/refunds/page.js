@@ -91,6 +91,7 @@ const Refunds = () => {
               options={options}
               onSelect={handleSelect}
               icon={"ep:arrow-down"}
+              leftIcon={"uis:calender"}
               className={"bg-[#F6F6F8] border border-[#D6D6D6] p-2"}
               title={"July 12, 2021 - August 10, 2021"}
             />
@@ -169,98 +170,168 @@ const data = [
   {
     ammount: "$100.00",
     receipt_number: "12345",
-    status: "Completed",
+    status: (
+      <div className="flex items-center ">
+        <Icon icon="radix-icons:dot-filled" color="#179800" width={25} />
+        <p>Successful</p>
+      </div>
+    ),
     transaction_reference: "ABC123",
     date: "2023-08-13 10:00 AM",
   },
   {
     ammount: "$75.50",
     receipt_number: "54321",
-    status: "Pending",
+    status: (
+      <div className="flex items-center ">
+        <Icon icon="radix-icons:dot-filled" color="#FF0027" width={25} />
+        <p>Failed</p>
+      </div>
+    ),
     transaction_reference: "XYZ789",
     date: "2023-08-13 02:30 PM",
   },
   {
     ammount: "$75.50",
     receipt_number: "54321",
-    status: "Pending",
+    status: (
+      <div className="flex items-center ">
+        <Icon icon="radix-icons:dot-filled" color="#8D4511" width={25} />
+        <p>Abandoned</p>
+      </div>
+    ),
     transaction_reference: "XYZ789",
     date: "2023-08-13 02:30 PM",
   },
   {
     ammount: "$75.50",
     receipt_number: "54321",
-    status: "Pending",
+    status: (
+      <div className="flex items-center ">
+        <Icon icon="radix-icons:dot-filled" color="#A40EC7" width={25} />
+        <p>Reversed</p>
+      </div>
+    ),
     transaction_reference: "XYZ789",
     date: "2023-08-13 02:30 PM",
   },
   {
     ammount: "$75.50",
     receipt_number: "54321",
-    status: "Pending",
+    status: (
+      <div className="flex items-center ">
+        <Icon icon="radix-icons:dot-filled" color="#A40EC7" width={25} />
+        <p>Reversed</p>
+      </div>
+    ),
     transaction_reference: "XYZ789",
     date: "2023-08-13 02:30 PM",
   },
   {
     ammount: "$75.50",
     receipt_number: "54321",
-    status: "Pending",
+    status: (
+      <div className="flex items-center ">
+        <Icon icon="radix-icons:dot-filled" color="#8D4511" width={25} />
+        <p>Abandoned</p>
+      </div>
+    ),
     transaction_reference: "XYZ789",
     date: "2023-08-13 02:30 PM",
   },
   {
     ammount: "$75.50",
     receipt_number: "54321",
-    status: "Pending",
+    status: (
+      <div className="flex items-center ">
+        <Icon icon="radix-icons:dot-filled" color="#8D4511" width={25} />
+        <p>Abandoned</p>
+      </div>
+    ),
     transaction_reference: "XYZ789",
     date: "2023-08-13 02:30 PM",
   },
   {
     ammount: "$100.00",
     receipt_number: "12345",
-    status: "Completed",
+    status: (
+      <div className="flex items-center ">
+        <Icon icon="radix-icons:dot-filled" color="#179800" width={25} />
+        <p>Successful</p>
+      </div>
+    ),
     transaction_reference: "ABC123",
     date: "2023-08-13 10:00 AM",
   },
   {
     ammount: "$75.50",
     receipt_number: "54321",
-    status: "Pending",
+    status: (
+      <div className="flex items-center ">
+        <Icon icon="radix-icons:dot-filled" color="#179800" width={25} />
+        <p>Successful</p>
+      </div>
+    ),
     transaction_reference: "XYZ789",
     date: "2023-08-13 02:30 PM",
   },
   {
     ammount: "$75.50",
     receipt_number: "54321",
-    status: "Pending",
+    status: (
+      <div className="flex items-center ">
+        <Icon icon="radix-icons:dot-filled" color="#FF0027" width={25} />
+        <p>Failed</p>
+      </div>
+    ),
     transaction_reference: "XYZ789",
     date: "2023-08-13 02:30 PM",
   },
   {
     ammount: "$75.50",
     receipt_number: "54321",
-    status: "Pending",
+    status: (
+      <div className="flex items-center ">
+        <Icon icon="radix-icons:dot-filled" color="#FF0027" width={25} />
+        <p>Failed</p>
+      </div>
+    ),
     transaction_reference: "XYZ789",
     date: "2023-08-13 02:30 PM",
   },
   {
     ammount: "$75.50",
     receipt_number: "54321",
-    status: "Pending",
+    status: (
+      <div className="flex items-center ">
+        <Icon icon="radix-icons:dot-filled" color="#179800" width={25} />
+        <p>Successful</p>
+      </div>
+    ),
     transaction_reference: "XYZ789",
     date: "2023-08-13 02:30 PM",
   },
   {
     ammount: "$75.50",
     receipt_number: "54321",
-    status: "Pending",
+    status: (
+      <div className="flex items-center ">
+        <Icon icon="radix-icons:dot-filled" color="#179800" width={25} />
+        <p>Successful</p>
+      </div>
+    ),
     transaction_reference: "XYZ789",
     date: "2023-08-13 02:30 PM",
   },
   {
     ammount: "$75.50",
     receipt_number: "54321",
-    status: "Pending",
+    status: (
+      <div className="flex items-center ">
+        <Icon icon="radix-icons:dot-filled" color="#FF0027" width={25} />
+        <p>Failed</p>
+      </div>
+    ),
     transaction_reference: "XYZ789",
     date: "2023-08-13 02:30 PM",
   },
