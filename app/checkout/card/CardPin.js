@@ -106,7 +106,7 @@ export default function CardPin({ cardProps }) {
   };
 
   return (
-    <div className="text-center text-center mt-16">
+    <div className=" text-center mt-16">
       {!isValidateOtp ? (
         <form
           className={
@@ -142,7 +142,6 @@ export default function CardPin({ cardProps }) {
         <OtpVerify response={responseData.data} />
         // isValidateOtp && <Upsl response={responseData}/>
       )}
-  
     </div>
   );
 }

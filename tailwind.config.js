@@ -1,13 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-
-    // Or if using `src` directory:
-    "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx}",
+    "./pages/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
   ],
+
   theme: {
     extend: {
       colors: {
@@ -20,6 +18,12 @@ module.exports = {
       width: {
         sidebar: "25%",
         aside: "15%",
+      },
+      gridTemplateColumns: {
+        sidebar: "300px auto", //for sidebar layout
+      },
+      gridTemplateRows: {
+        header: "64px auto", //for the navbar layout
       },
     },
   },
