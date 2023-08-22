@@ -8,7 +8,10 @@ const Layout = ({ children }) => {
   return (
     <div className="grid min-h-screen grid-rows-header bg-zinc-100">
       <div>
-        <Navbar onMenuButtonClick={() => setSidebarOpen((prev) => !prev)} />
+        <Navbar
+          onMenuButtonClick={() => setSidebarOpen((prev) => !prev)}
+          title={""}
+        />
       </div>
 
       <div className="grid md:grid-cols-sidebar mt-3 bg-[#F5F5F5]">

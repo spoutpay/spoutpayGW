@@ -2,7 +2,9 @@
 import ButtonWithIcon from "@/app/components/Admin/ButtonWithIcon";
 import Dropdown from "@/app/components/Admin/DropdownComponent";
 import InputWithIcon from "@/app/components/Admin/InputWithIcon";
+import Modal from "@/app/components/Admin/Modal";
 import { Icon } from "@iconify/react";
+import Link from "next/link";
 import React, { useState } from "react";
 import { useTable } from "react-table";
 
@@ -149,6 +151,10 @@ const columns = [
     Header: "Expiry Date",
     accessor: "date",
   },
+  {
+    Header: "",
+    accessor: "charge_back",
+  },
 ];
 
 const data = [
@@ -247,6 +253,13 @@ const data = [
     ),
     transaction_reference: "ABC123",
     date: "2023-08-13 10:00 AM",
+    charge_back: (
+      <Link href="/admin/charge-back">
+        <button className="bg-[#FFF0E6] border border-[#AF4300] py-2 px-5 rounded-md text-[#AF4300]">
+          Charge Back
+        </button>
+      </Link>
+    ),
   },
   {
     ammount: "$75.50",
@@ -271,6 +284,13 @@ const data = [
     ),
     transaction_reference: "XYZ789",
     date: "2023-08-13 02:30 PM",
+    charge_back: (
+      <Link href="/admin/charge-back">
+        <button className="bg-[#FFF0E6] border border-[#AF4300] py-2 px-5 rounded-md text-[#AF4300]">
+          Charge Back
+        </button>
+      </Link>
+    ),
   },
   {
     ammount: "$75.50",
@@ -295,6 +315,13 @@ const data = [
     ),
     transaction_reference: "XYZ789",
     date: "2023-08-13 02:30 PM",
+    charge_back: (
+      <Link href="/admin/charge-back">
+        <button className="bg-[#FFF0E6] border border-[#AF4300] py-2 px-5 rounded-md text-[#AF4300]">
+          Charge Back
+        </button>
+      </Link>
+    ),
   },
   {
     ammount: "$75.50",

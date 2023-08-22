@@ -16,7 +16,7 @@ const Sidebar = ({ open, setOpen }) => {
         "flex flex-col justify-between text-hoss": true, // layout
         "bg-[#060D27] text-white": true, // colors
         "md:w-full md:sticky md:top-16 md:z-0 top-0 z-20 fixed": true, // positioning
-        "h-screen w-[300px]": true, // for height and width
+        "h-full w-[300px]": true, // for height and width
         "transition-transform .3s ease-in-out md:-translate-x-0": true, //animations
         "-translate-x-full ": !open, //hide sidebar to the left when closed
       })}
@@ -24,12 +24,13 @@ const Sidebar = ({ open, setOpen }) => {
     >
       <nav className="md:sticky top-0 md:top-16">
         {/* nav items */}
-        <ul className=" pl-10 flex flex-col gap-2 gap-y-2 mt-10">
+        <ul className=" pl-5 flex flex-col gap-2 gap-y-2 mt-10">
           {navItems.map((item, index) => {
             return (
               <>
-                <Link key={index} href={`${BASE_URL}${item.href}`}>
+                <Link href={`${BASE_URL}${item.href}`}>
                   <li
+                    key={index}
                     className={classNames({
                       "": true, //colors
                       "flex gap-4 items-center ": true, //layout
@@ -49,12 +50,13 @@ const Sidebar = ({ open, setOpen }) => {
       </nav>
       {/* account  */}
       <div className="">
-        <ul className=" pl-10 flex flex-col gap-2 gap-y-2 mt-20 mb-8">
+        <ul className=" pl-5 flex flex-col gap-2 gap-y-2 mt-16 mb-8">
           {navBottomItems.map((item, index) => {
             return (
               <>
-                <Link key={index} href={item.href}>
+                <Link href={item.href}>
                   <li
+                    key={index}
                     className={classNames({
                       "": true, //colors
                       "flex gap-4 items-center ": true, //layout

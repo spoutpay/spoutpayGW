@@ -42,7 +42,7 @@ function LineChart() {
     labels: salesData.map((data) => data.month),
     datasets: [
       {
-        label: "Transactions",
+        label: "Transaction Performance",
         data: salesData.map((data) => data.sales),
         borderColor: "#360D90",
         borderWidth: 3,
@@ -112,13 +112,13 @@ function LineChart() {
   return (
     <div className=" bg-white rounded-md m-5 ">
       <div
-        className="w-full "
-        style={{
-          width: "100%",
-          height: "500px",
-          padding: "20px",
-          cursor: "pointer",
-        }}
+        className="w-full flex justify-center"
+        // style={{
+        //   width: "100%",
+        //   height: "500px",
+        //   padding: "20px",
+        //   cursor: "pointer",
+        // }}
       >
         <Line data={data} options={options}></Line>
       </div>

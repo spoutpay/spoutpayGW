@@ -2,12 +2,13 @@
 import React, { useState } from "react";
 import classNames from "classnames";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Dropdown from "./DropdownComponent";
 import { Icon } from "@iconify/react";
 
-const Navbar = ({ onMenuButtonClick }) => {
+const Navbar = ({ onMenuButtonClick, title }) => {
   const pathname = usePathname();
+  const router = useRouter();
 
   const options = [{ label: "Option 1", value: "option1" }];
 
@@ -31,12 +32,14 @@ const Navbar = ({ onMenuButtonClick }) => {
           className=""
           width={100}
           height={50}
+          onChange={() => router.push("/admin")}
         />
+
         <p className="mt-0 p-0 text-sm"> ADMIN</p>
       </div>
       <div className="flex w-full items-center justify-between">
         <div>
-          <p className="">Overview</p>
+          <p className="">{title}</p>
         </div>
         <div className="flex  items-center gap-2 ">
           <Icon icon="mdi:bell-notification-outline" width="25" />
