@@ -1,8 +1,9 @@
+"use client";
 import React, { useCallback, useEffect, useRef } from "react";
 
 import styles from "../../styles/modal.module.css";
 
-const Modal = ({ onClose, children, title, modalOverlayClassname }) => {
+const Modal = ({ onClose, children, title, modalWrapperClassname }) => {
   const modalWrapperRef = useRef();
 
   const backDropHandler = useCallback((e) => {
@@ -27,11 +28,11 @@ const Modal = ({ onClose, children, title, modalOverlayClassname }) => {
   };
 
   return (
-    <div
-      className={`${styles.modalOverlay} ${modalOverlayClassname}`}
-      ref={modalWrapperRef}
-    >
-      <div className={styles.modalWrapper}>
+    <div className={styles.modalOverlay}>
+      <div
+        className={`${styles.modalWrapper}${modalWrapperClassname}`}
+        ref={modalWrapperRef}
+      >
         <div className={styles.modal}>
           <div className={styles.modalHeader}>
             {/* <a href="#" onClick={handleCloseClick}>

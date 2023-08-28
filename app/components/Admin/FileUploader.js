@@ -4,7 +4,7 @@ import React, { useRef, useState } from "react";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
 
-const FileUploader = () => {
+const FileUploader = ({ className }) => {
   const [files, setFile] = useState([]);
   const [message, setMessage] = useState();
   const handleFile = (e) => {
@@ -27,7 +27,7 @@ const FileUploader = () => {
 
   return (
     <>
-      <div className=" flex justify-center items-center px-2">
+      <div className={` ${className} flex items-center `}>
         <div className="p-3 md:w-1/2 rounded-md">
           <span className="flex justify-center items-center  text-[12px] mb-1 text-red-500">
             {message}

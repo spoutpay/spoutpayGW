@@ -55,6 +55,7 @@ const Payment = () => {
           </div>
         </div>
         <hr className="bg-[#D9D9D9] h-[1px]" />
+        {/* Table */}
         <div className="px-5 pt-10">
           <div className="w-full w3-container w3-responsive">
             {" "}
@@ -99,7 +100,7 @@ const Payment = () => {
         <Modal
           title={""}
           onClose={() => setShowModal(false)}
-          modalOverlayClassname={"w-2/3"}
+          modalWrapperClassname={"w-2/3"}
         >
           <div>
             <h2 className="text-center text-lg">

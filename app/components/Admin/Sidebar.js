@@ -4,8 +4,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { useClickAway } from "@uidotdev/usehooks";
 import { Icon } from "@iconify/react";
+import { usePathname } from "next/navigation";
 
 const Sidebar = ({ open, setOpen }) => {
+  const currentRoute = usePathname();
   const ref = useRef(null);
   useClickAway(ref, (e) => {
     setOpen(false);
@@ -14,7 +16,7 @@ const Sidebar = ({ open, setOpen }) => {
     <div
       className={classNames({
         "flex flex-col justify-between text-hoss": true, // layout
-        "bg-[#060D27] text-white": true, // colors
+        "bg-[#060D27] ": true, // colors
         "md:w-full md:sticky md:top-16 md:z-0 top-0 z-20 fixed": true, // positioning
         "h-full w-[300px]": true, // for height and width
         "transition-transform .3s ease-in-out md:-translate-x-0": true, //animations
@@ -28,7 +30,14 @@ const Sidebar = ({ open, setOpen }) => {
           {navItems.map((item, index) => {
             return (
               <>
-                <Link href={`${BASE_URL}${item.href}`}>
+                <Link
+                  href={`${BASE_URL}${item.href}`}
+                  className={
+                    currentRoute === `${BASE_URL}${item.href}`
+                      ? "text-[#EFEF2E]"
+                      : "text-white"
+                  }
+                >
                   <li
                     key={index}
                     className={classNames({
@@ -54,7 +63,14 @@ const Sidebar = ({ open, setOpen }) => {
           {navBottomItems.map((item, index) => {
             return (
               <>
-                <Link href={item.href}>
+                <Link
+                  href={`${BASE_URL}${item.href}`}
+                  className={
+                    currentRoute === `${BASE_URL}${item.href}`
+                      ? "text-[#EFEF2E]"
+                      : "text-white"
+                  }
+                >
                   <li
                     key={index}
                     className={classNames({
