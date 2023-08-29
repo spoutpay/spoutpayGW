@@ -9,11 +9,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        darkBlue: "#060D27",
-        grayColor: "#7E7E7E",
-        lightGray: "#7E7E7E",
+        "dark-blue": "#060D27",
+        "gray-color": "#7E7E7E",
+        "light-gray": "#7E7E7E",
         tulip: "#77C485",
         body: "#FFFFFFD6",
+        "input-focus": "#74B8FF",
       },
       width: {
         sidebar: "25%",

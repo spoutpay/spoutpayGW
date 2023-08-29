@@ -1,4 +1,5 @@
 import Head from "./head";
+import Providers from "./redux/provider";
 import "./styles/globals.css";
 import { Varela_Round } from "next/font/google";
 
@@ -17,7 +18,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <Head />
-      <body className={varela.className}>{children}</body>
+      <body className={varela.className}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

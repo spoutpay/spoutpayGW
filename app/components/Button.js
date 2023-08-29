@@ -2,20 +2,22 @@ const Button = ({ text, onClick, variant }) => {
   const getButtonStyle = () => {
     switch (variant) {
       case "primary":
-        return "bg-blue-500 hover:bg-blue-600";
+        return "bg-blue-500 hover:bg-blue-600 text-white";
       case "secondary":
-        return "bg-gray-500 hover:bg-gray-600";
+        return "bg-gray-500 hover:bg-gray-600 text-white";
       case "tulip":
-        return "bg-tulip hover:bg-tulip";
+        return "bg-tulip hover:bg-tulip text-white";
+      case "transparent":
+        return "bg-transparent border hover:bg-transparent text-gray-500 hover:text-gray-600";
       default:
-        return "bg-gray-500 hover:bg-gray-600";
+        return "bg-gray-500 hover:bg-gray-600 text-white";
     }
   };
 
   return (
     <button
       onClick={onClick}
-      className={`px-4 py-3 w-full rounded text-white font-bold ${getButtonStyle()} focus:outline-none focus:shadow-outline`}
+      className={`px-4 py-3 w-full text-xs md:text-sm rounded font-bold ${getButtonStyle()} focus:outline-none focus:shadow-outline`}
     >
       {text}
     </button>

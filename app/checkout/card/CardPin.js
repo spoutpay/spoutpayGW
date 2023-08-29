@@ -1,22 +1,29 @@
+"use client";
+
+import { useSelector, useDispatch } from "react-redux";
+import { cardDataResponse } from "@/app/redux/features/cardSlice";
 import Button from "@/app/components/Button";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import OTPInput from "react-otp-input";
 import AppData from "../../config/appData.json";
 import axios from "axios";
-import OtpVerify from "./OtpVerify";
+import { useRouter } from "next/navigation";
 import Upsl from "./Upsl";
+import CryptoJS from "crypto-js";
+import Encryption from "@/app/components/Encryption";
 
-export default function CardPin({ cardProps }) {
+export default function CardPin({ cardType }) {
+  const cardInfo = useSelector((state) => state.card.value.cardData);
+  const dispatch = useDispatch();
   const amount = "80";
   const [loading, setLoading] = useState(false);
   const [otp, setOtp] = useState("");
-  const [cardData, setCardData] = useState({});
   const [isValidateOtp, setIsValidateOtp] = useState(false);
   const [responseData, setResponseData] = useState({});
-  const { pan, expDate, cvv } = cardData;
+  const { pan, expDate, cvv } = cardInfo;
   const email = "onomeofogba@gmail.com";
   const phoneNum = "08103327651";
   const currency = "NGN";
@@ -28,6 +35,9 @@ export default function CardPin({ cardProps }) {
   let depth = screen.colorDepth;
   let agent = navigator.userAgent;
   let java = navigator.javaEnabled();
+  const router = useRouter();
+  const [encryptedText, setEncryptedText] = useState("");
+  const secretKey = "16CharacterKey!!";
 
   const cleanedExpDate = expDate?.replace(/\s|\/+/g, "");
   const cleanedPan = pan?.replace(/\s|\/+/g, "");
@@ -62,16 +72,10 @@ export default function CardPin({ cardProps }) {
     resolver: yupResolver(schema),
   });
 
-  useEffect(() => {
-    const data = localStorage.getItem("paymentData");
-    const payData = JSON.parse(data);
-    setCardData(payData);
-  }, []);
-
   const initiateCardTransaction = async (data) => {
-    const endpoint = AppData.BASE_URL + "interswitch/access";
-    // const endpoint =
-    //   "https://8bc2-2-31-148-147.ngrok-free.app/api/v1/upsl/process";
+    // const endpoint = AppData.BASE_URL + "interswitch/access";
+    const endpoint = "http://139.162.232.66:9000/api/v1/upsl/process";
+
 
     const requestData = {
       data,
@@ -88,22 +92,37 @@ export default function CardPin({ cardProps }) {
 
     try {
       setLoading(true);
-      // console.log("requet data", requestData)
-      const response = await axios.post(endpoint, data, {
+      const encryptedDataResult = CryptoJS.AES.encrypt(
+        JSON.stringify(data),
+        secretKey,
+        {
+          mode: CryptoJS.mode.ECB,
+        }
+      );
+      setEncryptedText(encryptedDataResult.toString());
+
+      const response = await axios.post(endpoint, requestData, {
         headers: {
           "Content-Type": "application/json",
         },
       });
-
+      dispatch(cardDataResponse(response.data));
       setResponseData(response.data);
-      console.log(response.data);
+      console.log("response", response.data);
       setIsValidateOtp(true);
+      // if (cardType !== "Visa") {
+      //   router.push("/checkout/otpverifier");
+      // } else {
+      //   router.push("/checkout/visaverifier");
+      // }
     } catch (error) {
       console.error("Error:", error.message);
     } finally {
       setLoading(false);
     }
   };
+
+  localStorage.setItem("encryptedData", encryptedText);
 
   return (
     <div className=" text-center mt-16">
@@ -139,8 +158,8 @@ export default function CardPin({ cardProps }) {
           </div>
         </form>
       ) : (
-        <OtpVerify response={responseData.data} />
-        // isValidateOtp && <Upsl response={responseData}/>
+        // <OtpVerify response={responseData.data} />
+        isValidateOtp && <Upsl response={responseData} />
       )}
     </div>
   );

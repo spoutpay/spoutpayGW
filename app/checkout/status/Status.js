@@ -7,7 +7,7 @@ export default function Status({ message }) {
   const router = useRouter();
 
   return (
-    <div className="text-center ml-24">
+    <div className="text-center">
       {message === "success" ? (
         <>
           <div>

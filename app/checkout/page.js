@@ -1,104 +1,183 @@
 "use client";
 
+import { updateCardData } from "../redux/features/cardSlice";
+import { useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import {
+  formatCardNumber,
+  isValidCardNumber,
+  getCardType,
+} from "@/app/utils/CardNumberUtils";
+import isValidExpiry from "@/app/utils/ValidateExpiryDate";
 import Image from "next/image";
-import { useState } from "react";
-import CardData from "./card/CardData";
-import Bank from "./bank/Bank";
-import Transfer from "./transfer/Transfer";
-import Ussd from "./ussd/Ussd";
-import PayAttitude from "./pay-attitude/PayAttitude";
-import PayCode from "./pay-code/PayCode";
-import QrCode from "./qr-code/QrCode";
+import Button from "@/app/components/Button";
+import CardPin from "./card/CardPin";
 
-const navItems = [
-  {
-    name: "Card",
-    imageSrc: "/card-menu-icon.svg",
-    content: <CardData />,
-    navItemClass: "icon-dark text-white",
-  },
-  { name: "Bank", imageSrc: "/bank-menu-icon.svg", content: <Bank /> },
-  {
-    name: "Transfer",
-    imageSrc: "/transfer-menu-icon.svg",
-    content: <Transfer />,
-  },
-  { name: "USSD", imageSrc: "/ussd-menu-icon.svg", content: <Ussd /> },
-  {
-    name: "PayAttitude",
-    imageSrc: "/payattitude-menu-icon.svg",
-    content: <PayAttitude />,
-  },
-  { name: "Paycode", imageSrc: "/spoutpay-logo.svg", content: <PayCode /> },
-  { name: "QR Code", imageSrc: "/qr-logo.svg", content: <QrCode /> },
-];
+const inputClassNames =
+  "w-full border px-2.5 pt-6 pb-2.5 rounded text-xs text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-input-focus";
 
-const activeNavClass =
-  "flex bg-gray-700 border-b-0 border-yellow-300 border-e-8 text-white gap-2 px-2 py-4 block cursor-pointer";
+const labelClassName =
+  "block text-gray-700 mb-2 absolute start-2.5 top-2 text-xs uppercase";
 
-const navClass =
-  "flex border-b-2 border-slate-100 gap-2 px-2 py-4 text-dark block cursor-pointer";
-
-// const nav={activeNav ?  : navClass}
+const imageSrc = {
+  Mastercard: "/master-card.png",
+  Verve: "/verve.png",
+  Visa: "/visa.png",
+};
 
 export default function Checkout() {
-  const [activeNav, setActiveNav] = useState(0);
+  const dispatch = useDispatch();
+  const amount = 100;
+  const [loading, setLoading] = useState(false);
+  const [cardNumber, setCardNumber] = useState("");
+  const [cardType, setCardType] = useState("");
+  const [enterPin, setEnterpin] = useState(false);
 
-  const activateNav = (index) => {
-    setActiveNav(index);
+  const handleCardNumberChange = (event) => {
+    const formattedValue = formatCardNumber(event.target.value);
+    const cardType = getCardType(formattedValue);
+    setCardType(cardType);
+
+    let maxLength;
+    if (cardType === "mastercard") {
+      maxLength = 19;
+    } else if (cardType === "Verve") {
+      maxLength = 23;
+    } else {
+      maxLength = 19;
+    }
+
+    setCardNumber(formattedValue.slice(0, maxLength));
+  };
+
+  const PaymentSchema = yup.object().shape({
+    pan: yup
+      .string()
+      .required("Card number is required")
+      .test("valid-card", "Invalid card number", (cardNumber) => {
+        return cardNumber ? isValidCardNumber(cardNumber) : true;
+      })
+      .default(cardNumber),
+    expDate: yup
+      .string()
+      .required("Card expiry is required")
+      .test("valid-expiry", "Invalid card expiry", (value) => {
+        return value ? isValidExpiry(value) : true; // Implement the isValidExpiry function to validate the card expiry
+      }),
+    cvv: yup
+      .string()
+      .required("CVV is required")
+      .matches(/^\d{3}$/, "Invalid CVV (must be 3 digits)"),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(PaymentSchema),
+  });
+
+  const onSubmit = async (data) => {
+    try {
+      setLoading(true);
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // setCardData(data);
+      dispatch(updateCardData(data));
+      setEnterpin(true);
+    } catch (error) {
+      console.error("Payment processing error:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="w-2/4 mt-20 bg-white">
-      <nav className="px-6 h-16 bg-darkBlue flex item-center">
-        <div className="flex">
-          <Image
-            src="/spout-logo-dark.svg"
-            alt="Spout"
-            width={80}
-            height={80}
-          />
-        </div>
-      </nav>
-      <div className="flex flex-col md:flex-row h-max">
-        {/* Sidebar */}
-        <div className="w-full md:w-sidebar bg-white uppercase text-xs border-r-2 md:border-e-2 md:border-e-2 text-lightGray">
-          <div className="flex flex-col">
-            <h1 className="font-bold border-b-2 py-5 px-3 text-darkBlue">
-              Select payment method
-            </h1>
-          </div>
-          <ul>
-            {navItems.map((nav, i) => (
-              <li
-                key={i}
-                className={i === activeNav ? activeNavClass : navClass}
-                onClick={() => activateNav(i)}
-              >
-                <div className={nav.navItemClass}>
+    <div className="flex item-center text-center justify-center mt-8">
+      {!enterPin ? (
+        <form className="w-100 mx-10" onSubmit={handleSubmit(onSubmit)}>
+          <h1 className="sm:text-base text-xs font-bold mb-6 capitalize">
+            Enter your card details to pay
+          </h1>
+          <div className="flex flex-wrap">
+            <div className="w-full mb-2.5 relative">
+              <label className={labelClassName}>Card number</label>
+              {cardType && cardType !== "Unknown" && (
+                <div className="absolute top-4 right-4">
                   <Image
-                    src={nav.imageSrc}
-                    width={20}
-                    height={20}
-                    alt={nav.name}
-                    // className={i === activeNav ? "icon" : ""}
+                    src={imageSrc[cardType]}
+                    height={30}
+                    width={50}
+                    alt="card"
                   />
                 </div>
-                {nav.name}
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="flex-auto">
-          <div className="flex justify-end align-center text-xs border-b-2 py-5 px-3">
-            <div className="">
-              <h6>emailaddress@gmail.com</h6>
-              <p className="uppercase">pay NGN1000</p>
+              )}
+              <input
+                type="text"
+                name="pan"
+                placeholder="0000 0000 0000 0000"
+                className={`${inputClassNames} ${
+                  errors.pan ? "border-red-200" : ""
+                }`}
+                value={cardNumber}
+                onChange={handleCardNumberChange}
+              />
+              {errors.pan && (
+                <p className="text-red-500 text-xs italic mt-1">
+                  {errors.pan.message}
+                </p>
+              )}
+            </div>
+            <div className="w-full flex flex-wrap">
+              <div className="w-1/2 mb-2.5 relative pr-1">
+                <label className={labelClassName}>Card expiry</label>
+                <input
+                  type="text"
+                  name="expDate"
+                  placeholder="YY / MM"
+                  className={`${inputClassNames} ${
+                    errors.expDate ? "border-red-200" : ""
+                  }`}
+                  {...register("expDate")}
+                />
+                {errors.expDate && (
+                  <p className="text-red-500 text-xs italic mt-1">
+                    {errors.expDate.message}
+                  </p>
+                )}
+              </div>
+              <div className="w-1/2 mb-2.5 relative pl-1">
+                <label className={labelClassName}>CVV</label>
+                <input
+                  type="text"
+                  name="cvv"
+                  placeholder="123"
+                  className={`${inputClassNames} ${
+                    errors.cvv ? "border-red-200" : ""
+                  }`}
+                  {...register("cvv")}
+                />
+                {errors.cvv && (
+                  <p className="text-red-500 text-xs italic mt-1">
+                    {errors.cvv.message}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
-          {navItems[activeNav].content}
-        </div>
-      </div>
+          <Button
+            text={loading ? "Loading..." : `Pay NGN ${amount}`}
+            variant="tulip"
+            type="submit"
+            disabled={loading}
+          />
+        </form>
+      ) : (
+        <CardPin cardType={cardType} />
+      )}
     </div>
   );
 }
