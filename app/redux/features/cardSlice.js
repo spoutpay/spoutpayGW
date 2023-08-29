@@ -6,6 +6,7 @@ const cardSlice = createSlice({
     cardNumber: "",
     expData: "",
     cvv: "",
+    apiResponse: null,
   },
   reducers: {
     updateCardData: (state, action) => {
@@ -15,8 +16,11 @@ const cardSlice = createSlice({
         },
       };
     },
+    cardDataResponse: (state, action) => {
+      state.apiResponse = action.payload;
+    },
   },
 });
 
-export const { updateCardData } = cardSlice.actions;
+export const { updateCardData, cardDataResponse } = cardSlice.actions;
 export default cardSlice.reducer;

@@ -10,14 +10,14 @@ import {
   formatCardNumber,
   isValidCardNumber,
   getCardType,
-} from "@/app/components/CardNumberUtils";
-import isValidExpiry from "@/app/components/ValidateExpiryDate";
+} from "@/app/utils/CardNumberUtils";
+import isValidExpiry from "@/app/utils/ValidateExpiryDate";
 import Image from "next/image";
 import Button from "@/app/components/Button";
 import CardPin from "./card/CardPin";
 
 const inputClassNames =
-  "w-full border px-2.5 pt-6 pb-2.5 rounded text-xs md:text-sm text-gray-700 leading-tight focus:outline-none focus:shadow-outline";
+  "w-full border px-2.5 pt-6 pb-2.5 rounded text-xs text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-input-focus";
 
 const labelClassName =
   "block text-gray-700 mb-2 absolute start-2.5 top-2 text-xs uppercase";
@@ -35,7 +35,6 @@ export default function Checkout() {
   const [cardNumber, setCardNumber] = useState("");
   const [cardType, setCardType] = useState("");
   const [enterPin, setEnterpin] = useState(false);
-  const [cardData, setCardData] = useState({});
 
   const handleCardNumberChange = (event) => {
     const formattedValue = formatCardNumber(event.target.value);
@@ -86,7 +85,7 @@ export default function Checkout() {
     try {
       setLoading(true);
       await new Promise((resolve) => setTimeout(resolve, 1500));
-      setCardData(data);
+      // setCardData(data);
       dispatch(updateCardData(data));
       setEnterpin(true);
     } catch (error) {
@@ -177,7 +176,7 @@ export default function Checkout() {
           />
         </form>
       ) : (
-        <CardPin />
+        <CardPin cardType={cardType} />
       )}
     </div>
   );

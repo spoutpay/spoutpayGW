@@ -38,7 +38,7 @@ export default function RootLayout({ children }) {
       </Head>
       <div className="flex justify-center align-center bg-white">
         <div className="w-2/4 mt-20 bg-white">
-          <nav className="px-6 h-16 bg-darkBlue flex item-center">
+          <nav className="px-6 h-16 bg-dark-blue flex item-center">
             <div className="flex">
               <Image
                 src="/spout-logo-dark.svg"
@@ -49,9 +49,9 @@ export default function RootLayout({ children }) {
             </div>
           </nav>
           <div className="flex flex-col md:flex-row h-max">
-            <div className="hidden md:block md:w-sidebar bg-white uppercase text-xs border-r-2 md:border-e-2 md:border-e-2 text-lightGray">
+            <div className="hidden md:block md:w-sidebar bg-white uppercase text-xs border-r-2 md:border-e-2 md:border-e-2 text-light-gray">
               <div className="flex flex-col">
-                <h1 className="font-bold border-b-2 py-5 px-3 text-darkBlue">
+                <h1 className="font-bold border-b-2 py-5 px-3 text-dark-blue">
                   Select payment method
                 </h1>
               </div>
@@ -61,7 +61,7 @@ export default function RootLayout({ children }) {
               <div className="flex justify-end align-center text-xs border-b-2 py-5 px-3">
                 <div className="">
                   <h6>emailaddress@gmail.com</h6>
-                  <p className="uppercase">pay NGN1000</p>
+                  <p className="uppercase text-tulip text-end">pay NGN1000</p>
                 </div>
               </div>
               {children}

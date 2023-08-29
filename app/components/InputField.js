@@ -7,7 +7,7 @@ const InputField = ({ label, type, placeholder, wrapClass }) => {
       <input
         type={type}
         placeholder={placeholder}
-        className="w-full border px-2.5 pt-6 pb-2.5 rounded text-sm text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        className="w-full border px-2.5 pt-6 pb-2.5 rounded text-xs text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
       />
     </div>
   );

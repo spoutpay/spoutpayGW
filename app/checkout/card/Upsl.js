@@ -1,27 +1,72 @@
-"use client";
+import React, { useState, useEffect, useRef } from "react";
+import CryptoJS from "crypto-js";
+import Decryption from "@/app/components/Decryption";
+import Encryption from "@/app/components/Encryption";
 
-import { useEffect, useRef } from "react";
+const SECRET_KEY = "16CharacterKey!!";
 
-export default function Upsl({ response }) {
+function Upsl({ response }) {
+  const [decryptedText, setDecryptedText] = useState("");
+  const [encryptedVal, setEncryptedVal] = useState("");
   const formRef = useRef(null);
+
+  console.log("res", response);
   useEffect(() => {
+    const requestData = localStorage.getItem("encryptedData");
+
+    try {
+      const decryptedData = CryptoJS.AES.decrypt(
+        requestData.toString(),
+        SECRET_KEY,
+        { mode: CryptoJS.mode.ECB }
+      );
+
+      const dataToString = decryptedData.toString(CryptoJS.enc.Utf8);
+      const parsedData = JSON.parse(dataToString);
+      console.log("res", response.data.OrderId);
+      const combinedData = {
+        transData: parsedData,
+        orderID: response?.data?.OrderId,
+        sessionID: response?.data?.SessionId,
+      };
+
+      localStorage.setItem("encryptCombinedData", JSON.stringify(combinedData));
+      console.log("combinedData", combinedData);
+
+      const encryptedDataResult = CryptoJS.AES.encrypt(
+        JSON.stringify(combinedData),
+        SECRET_KEY,
+        {
+          mode: CryptoJS.mode.ECB,
+        }
+      );
+      setEncryptedVal(encryptedDataResult.toString());
+    } catch (error) {
+      console.error("Error:", error);
+    }
+
     formRef.current.submit();
   }, []);
 
+  // localStorage.setItem("encryptCombinedData", combinedData);
+
   return (
-    <form
-      ref={formRef}
-      method="POST"
-      action={response?.data.processAreq.TKKPG.Response.Refinement.AcsURL}
-    >
-      {/* <h1 className="text-dark">Frame</h1> */}
-      <input
-        name="creq"
-        value={response?.data.processAreq.TKKPG.Response.Refinement.CReq}
-        readOnly
-        hidden
-      />
-      Loading...
-    </form>
+    <>
+      <form
+        ref={formRef}
+        method="POST"
+        action={response?.data?.TKKPG?.Response?.Refinement?.AcsURL}
+      >
+        <input
+          name="creq"
+          value={response?.data?.TKKPG?.Response?.Refinement?.CReq}
+          readOnly
+          hidden
+        />
+        Loading...
+      </form>
+    </>
   );
 }
+
+export default Upsl;
