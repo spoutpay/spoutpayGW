@@ -1,10 +1,21 @@
 "use client";
 import FileUploader from "@/app/components/Admin/FileUploader";
-import Modal from "@/app/components/Admin/Modal";
-import Link from "next/link";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  Center,
+} from "@chakra-ui/react";
+
 import React, { useRef, useState } from "react";
 
 const ChargeBack = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [showModal, setShowModal] = useState(false);
   const [fileName, setFileName] = useState("");
   const handleFile = (file) => {
@@ -102,7 +113,7 @@ const ChargeBack = () => {
         </div>
         <div className="flex justify-end gap-2 mt-5">
           <button
-            onClick={() => setShowModal(true)}
+            onClick={onOpen}
             type="button"
             className="border border-black py-2 px-5 rounded-sm"
           >
@@ -114,24 +125,28 @@ const ChargeBack = () => {
         </div>
       </form>
 
-      {showModal && (
-        <Modal title={"Decline Dispute"} onClose={() => setShowModal(false)}>
-          <form action="">
-            <label htmlFor="">Reasons for Decline</label>
-            <textarea
-              name="decline"
-              id=""
-              cols="30"
-              rows="10"
-              className="w-full h-[100px] border border-[#0981FC] rounded-md"
-            ></textarea>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Decline Dispute</ModalHeader>
+          <form action=" ">
+            <ModalBody>
+              <label htmlFor="">Reasons for Decline</label>
+              <textarea
+                name="decline"
+                id=""
+                cols="30"
+                rows="10"
+                className="w-full h-[100px] border border-[#0981FC] rounded-md"
+              ></textarea>
 
-            <div className="mt-5">
-              <label htmlFor="">Upload Evidence</label>
-              <FileUploader />
-            </div>
+              <div className="mt-5">
+                <label htmlFor="">Upload Evidence</label>
+                <FileUploader />
+              </div>
+            </ModalBody>
 
-            <div className="flex justify-center gap-2 mt-10">
+            <div className="flex justify-center gap-2 mt-10 mb-3">
               <button
                 type="button"
                 className="border border-black py-2 px-5 rounded-sm"
@@ -144,8 +159,8 @@ const ChargeBack = () => {
               </button>
             </div>
           </form>
-        </Modal>
-      )}
+        </ModalContent>
+      </Modal>
     </div>
   );
 };
