@@ -38,6 +38,7 @@ const LoginForm = () => {
           "Content-Type": "application/json",
         },
       });
+      localStorage.setItem("token", response.data.data.token)
       router.push("/admin");
     } catch (error) {
       console.log("Error", error);
