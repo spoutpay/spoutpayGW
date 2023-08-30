@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import CryptoJS from "crypto-js";
-import Decryption from "@/app/components/Decryption";
-import Encryption from "@/app/components/Encryption";
 
 const SECRET_KEY = "16CharacterKey!!";
 
