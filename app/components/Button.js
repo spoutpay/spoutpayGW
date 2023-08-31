@@ -1,4 +1,4 @@
-const Button = ({ text, onClick, variant }) => {
+const Button = ({ text, onClick, variant, buttonType }) => {
   const getButtonStyle = () => {
     switch (variant) {
       case "primary":
@@ -18,6 +18,7 @@ const Button = ({ text, onClick, variant }) => {
     <button
       onClick={onClick}
       className={`px-4 py-3 w-full text-xs md:text-sm rounded font-bold ${getButtonStyle()} focus:outline-none focus:shadow-outline`}
+      type={buttonType}
     >
       {text}
     </button>

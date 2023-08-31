@@ -13,7 +13,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import Upsl from "./Upsl";
 import CryptoJS from "crypto-js";
-import Encryption from "@/app/components/Encryption";
+import Encryption from "@/app/utils/Encryption";
 
 export default function CardPin({ cardType }) {
   const cardInfo = useSelector((state) => state.card.value.cardData);
@@ -76,7 +76,6 @@ export default function CardPin({ cardType }) {
     // const endpoint = AppData.BASE_URL + "interswitch/access";
     const endpoint = "http://139.162.232.66:9000/api/v1/upsl/process";
 
-
     const requestData = {
       data,
       extra: {
@@ -108,7 +107,6 @@ export default function CardPin({ cardType }) {
       });
       dispatch(cardDataResponse(response.data));
       setResponseData(response.data);
-      console.log("response", response.data);
       setIsValidateOtp(true);
       // if (cardType !== "Visa") {
       //   router.push("/checkout/otpverifier");
