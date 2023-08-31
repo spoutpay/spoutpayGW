@@ -2,7 +2,7 @@
 import ButtonWithIcon from "@/app/components/Admin/ButtonWithIcon";
 import Checkbox from "@/app/components/Admin/CheckBox";
 import Dropdown from "@/app/components/Admin/DropdownComponent";
-import Modal from "@/app/components/Admin/Modal";
+
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -11,7 +11,7 @@ import { useTable } from "react-table";
 
 const Payment = () => {
   const router = useRouter();
-  const [showModal, setShowModal] = useState(false);
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -96,7 +96,7 @@ const Payment = () => {
           </div>
         </div>
       </div>
-      {showModal && (
+      {/* {showModal && (
         <Modal
           title={""}
           onClose={() => setShowModal(false)}
@@ -191,7 +191,7 @@ const Payment = () => {
             </div>
           </div>
         </Modal>
-      )}
+      )} */}
     </>
   );
 };

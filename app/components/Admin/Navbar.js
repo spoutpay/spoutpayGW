@@ -1,14 +1,15 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter, useParams, usePathname } from "next/navigation";
 import Dropdown from "./DropdownComponent";
 import { Icon } from "@iconify/react";
 
-const Navbar = ({ onMenuButtonClick, title }) => {
-  const pathname = usePathname();
+const Navbar = ({ onMenuButtonClick }) => {
   const router = useRouter();
+  const pathname = usePathname();
+  console.log(pathname);
 
   const options = [{ label: "Option 1", value: "option1" }];
 
@@ -17,11 +18,32 @@ const Navbar = ({ onMenuButtonClick, title }) => {
   const handleSelect = (option) => {
     setSelectedValue(option.value);
   };
+
+  const Title = () => {
+    switch (pathname) {
+      case "/admin/get-started":
+        return "Overview";
+      case "/admin/transaction":
+        return "Transaction";
+      case "/admin/refunds":
+        return "Refunds";
+      case "/admin/disputes":
+        return "Dispute";
+      case "/admin/charge-back":
+        return "Charge Back";
+      case "/admin/settings":
+        return "Settings";
+      case "/payment-pages":
+        return "Payment Pages";
+      default:
+        "";
+    }
+  };
   return (
     <nav
       className={classNames({
         "bg-white text-zinc-500": true, // colors
-        "flex gap-[12rem]  items-center": true, // layout
+        "flex gap-[9rem]  items-center": true, // layout
         "w-full fixed z-10 p-4 px-10 h-20 shadow-sm  mb-5": true, //positioning & styling
       })}
     >
@@ -39,7 +61,7 @@ const Navbar = ({ onMenuButtonClick, title }) => {
       </div>
       <div className="flex w-full items-center justify-between">
         <div>
-          <p className="">{title}</p>
+          <p className="">{Title()}</p>
         </div>
         <div className="flex  items-center gap-2 ">
           <Icon icon="mdi:bell-notification-outline" width="25" />

@@ -1,8 +1,6 @@
 "use client";
 import React, { useCallback, useEffect, useRef } from "react";
 
-import styles from "../../styles/modal.module.css";
-
 const Modal = ({ onClose, children, title, modalWrapperClassname }) => {
   const modalWrapperRef = useRef();
 

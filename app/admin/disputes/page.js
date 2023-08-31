@@ -2,7 +2,7 @@
 import ButtonWithIcon from "@/app/components/Admin/ButtonWithIcon";
 import Dropdown from "@/app/components/Admin/DropdownComponent";
 import InputWithIcon from "@/app/components/Admin/InputWithIcon";
-import Modal from "@/app/components/Admin/Modal";
+
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import React, { useState } from "react";

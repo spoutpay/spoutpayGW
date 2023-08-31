@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useTable } from "react-table";
 import ButtonWithIcon from "../ButtonWithIcon";
 import { Icon } from "@iconify/react";
-import Modal from "../Modal";
+
 
 const SettlementAccounts = () => {
   const {
