@@ -8,7 +8,8 @@ const InputField = ({
   error,
 }) => {
   const inputClassName = `w-full border px-2.5 pt-6 pb-2.5 rounded text-xs text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-    error ? "border-red-500" : ""}`;
+    error ? "border-red-500" : ""
+  }`;
 
   return (
     <div className={wrapClass}>

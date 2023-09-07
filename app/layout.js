@@ -18,7 +18,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <Head />
-      <body className={varela.className}>
+      <body className={varela.className} suppressHydrationWarning={true}>
         <Providers>{children}</Providers>
       </body>
     </html>

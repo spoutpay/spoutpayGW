@@ -13,23 +13,36 @@ const Dropdown = ({ options, onSelect, icon, className, leftIcon, title }) => {
   };
 
   return (
-    <div className={`${className} `}>
+    <div className={`${className} relative inline-block text-left `}>
       <button
-        className="flex items-center gap-3"
+        className=" items-center gap-3 flex justify-start"
         onClick={() => setIsOpen(!isOpen)}
+        type="button"
       >
         <Icon icon={leftIcon} width="15" />
-        {selectedOption ? selectedOption.label : <div> {title} </div>}
+        {selectedOption ? selectedOption : <div> {title} </div>}
         <Icon icon={icon} width="15" />
       </button>
       {isOpen && (
-        <ul className="dropdown-options">
-          {options.map((option) => (
-            <li key={option.value} onClick={() => handleOptionClick(option)}>
-              {option.label}
-            </li>
-          ))}
-        </ul>
+        <div className="origin-top-right absolute right-0 w-full rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+          <div
+            className="py-1"
+            role="menu"
+            aria-orientation="vertical"
+            aria-labelledby="options-menu"
+          >
+            {options.map((option) => (
+              <button
+                key={option.value}
+                onClick={() => handleOptionClick(option)}
+                className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 border-b"
+                role="menuitem"
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        </div>
       )}
     </div>
   );

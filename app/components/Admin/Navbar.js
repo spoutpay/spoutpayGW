@@ -9,7 +9,6 @@ import { Icon } from "@iconify/react";
 const Navbar = ({ onMenuButtonClick }) => {
   const router = useRouter();
   const pathname = usePathname();
-  console.log(pathname);
 
   const options = [{ label: "Option 1", value: "option1" }];
 

@@ -1,21 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useTable } from "react-table";
 import ButtonWithIcon from "../ButtonWithIcon";
 import { useRouter } from "next/navigation";
+import AppData from "../../../config/appData.json";
+
+import axios from "axios";
 
 const TeamMembers = () => {
   const router = useRouter();
-  const {
-    getTableProps,
-    getTableBodyProps,
-    getToggleRowSelectedProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = useTable({
-    columns,
-    data,
-  });
+  const [message, setMessage] = useState("");
+  const [toastInfo, setToastInfo] = useState(null);
+  const [teamMembers, setTeamMembers] = useState();
+  const token = localStorage.getItem("token");
+  console.log(teamMembers?.data?.data);
+  const data = teamMembers?.data?.data;
+
+  useEffect(() => {
+    axios
+      .get(`${AppData.BASE_URL}settings/all-members`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(function (response) {
+        setTeamMembers(response);
+      })
+      .catch(function (error) {});
+    console.log("ran");
+  }, []);
   return (
     <div>
       <div className="flex justify-end mt-5">
@@ -34,41 +47,26 @@ const TeamMembers = () => {
         <div className="flex">
           <div className=" w-1/2 w3-responsive">
             {" "}
-            <table {...getTableProps()} className="w3-table    ">
+            <table className="w3-table    ">
               <thead className="bg-[#F9FBFC]">
-                {headerGroups.map((headerGroup, index) => (
-                  <tr key={index} {...headerGroup.getHeaderGroupProps()}>
-                    {headerGroup.headers.map((column, idx) => (
-                      <th
-                        key={idx}
-                        {...column.getHeaderProps()}
-                        className="text-sm font-light"
-                      >
-                        {column.render("Header")}
-                      </th>
-                    ))}
-                  </tr>
-                ))}
+                <tr>
+                  {columns.map((item, idx) => (
+                    <th key={idx}> {item.Header}</th>
+                  ))}
+                </tr>
               </thead>
 
-              <tbody
-                {...getTableBodyProps()}
-                className="bg-white border-b border-black "
-              >
-                {rows.map((row, id) => {
-                  prepareRow(row);
-                  return (
-                    <tr key={id} {...row.getRowProps()}>
-                      {row.cells.map((cell, index) => {
-                        return (
-                          <td key={index} {...cell.getCellProps()}>
-                            {cell.render("Cell")}
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  );
-                })}
+              <tbody className="bg-white border-b border-black ">
+                {data?.map((item, idx) => (
+                  <tr key={idx}>
+                    <td>Namaa</td>
+                    <td>{item.email}</td>
+                    <td className="">
+                    <p className="bg-[#D1E4F8CB] text-[#0981FD]  py-1 text-center rounded-md"> {item.role}</p>
+    
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -82,16 +80,13 @@ const TeamMembers = () => {
 const columns = [
   {
     Header: "Full Name",
-    accessor: "full_name",
   },
 
   {
     Header: "Email Address",
-    accessor: "email_address",
   },
   {
     Header: "Roles",
-    accessor: "roles",
   },
 ];
 

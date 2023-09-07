@@ -47,7 +47,7 @@ const Sidebar = ({ open, setOpen }) => {
                       "rounded-md px-2 mx-2 text-xs ": true, //self style
                     })}
                   >
-                    <Icon icon={item.icon} />
+                    <Icon icon={item.icon} width={20} />
                     {item.label}
                   </li>
                 </Link>
@@ -80,7 +80,7 @@ const Sidebar = ({ open, setOpen }) => {
                       "rounded-md px-2 mx-2 text-xs ": true, //self style
                     })}
                   >
-                    <Icon icon={item.icon} /> {item.label}
+                    <Icon icon={item.icon} width={20} /> <p> {item.label}</p>
                   </li>
                 </Link>
               </>
