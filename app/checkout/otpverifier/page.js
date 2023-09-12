@@ -42,7 +42,7 @@ export default function OtpVerifier() {
 
     try {
       setLoading(true);
-      const response = await axios.post(endpoint, data, {
+      await axios.post(endpoint, data, {
         headers: {
           "Content-Type": "application/json",
         },

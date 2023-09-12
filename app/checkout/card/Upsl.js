@@ -22,14 +22,15 @@ function Upsl({ response }) {
       const dataToString = decryptedData.toString(CryptoJS.enc.Utf8);
       const parsedData = JSON.parse(dataToString);
       console.log("res", response.data.OrderId);
-      const combinedData = {
-        transData: parsedData,
-        orderID: response?.data?.OrderId,
-        sessionID: response?.data?.SessionId,
-      };
+      const combinedData = {};
 
-      localStorage.setItem("encryptCombinedData", JSON.stringify(combinedData));
-      console.log("combinedData", combinedData);
+      if (response && response.data) {
+        combinedData.transData = parsedData;
+        combinedData.orderID = response.data.OrderId;
+        combinedData.sessionID = response.data.SessionId;
+      }
+      localStorage.setItem("encryptedData", JSON.stringify(combinedData));
+      // console.log("combinedData", combinedData);
 
       const encryptedDataResult = CryptoJS.AES.encrypt(
         JSON.stringify(combinedData),
@@ -46,7 +47,7 @@ function Upsl({ response }) {
     formRef.current.submit();
   }, []);
 
-  // localStorage.setItem("encryptCombinedData", combinedData);
+  // localStorage.setItem("encryptedData", combinedData);
 
   return (
     <>

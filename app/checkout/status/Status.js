@@ -1,10 +1,16 @@
 import Button from "@/app/components/Button";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Status({ message }) {
   const router = useRouter();
+
+  console.log("message", message);
+
+  useEffect(() => {
+    localStorage.removeItem("encryptedData");
+  })
 
   return (
     <div className="text-center">

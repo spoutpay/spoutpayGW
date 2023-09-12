@@ -73,7 +73,7 @@ export default function CardPin({ cardType }) {
   });
 
   const initiateCardTransaction = async (data) => {
-    // const endpoint = AppData.BASE_URL + "interswitch/access";
+    // const endpoint = `${AppData.BASE_URL}interswitch/access`;
     const endpoint = "http://139.162.232.66:9000/api/v1/upsl/process";
 
     const requestData = {
