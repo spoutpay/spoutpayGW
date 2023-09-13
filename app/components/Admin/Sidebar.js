@@ -30,28 +30,29 @@ const Sidebar = ({ open, setOpen }) => {
           {navItems.map((item, index) => {
             return (
               <>
-                <Link
-                  href={`${BASE_URL}${item.href}`}
-                  className={
-                    currentRoute === `${BASE_URL}${item.href}`
-                      ? "text-[#EFEF2E]"
-                      : "text-white"
-                  }
-                >
-                  <li
-                    key={index}
-                    className={classNames({
-                      "": true, //colors
-                      "flex gap-4 items-center ": true, //layout
-                      "transition-colors duration-300": true, //animation
-                      "rounded-md px-2 mx-2 text-xs ": true, //self style
-                    })}
+                <div key={index}>
+                  <Link
+                    href={`${BASE_URL}${item.href}`}
+                    className={
+                      currentRoute === `${BASE_URL}${item.href}`
+                        ? "text-[#EFEF2E]"
+                        : "text-white"
+                    }
                   >
-                    <Icon icon={item.icon} width={20} />
-                    {item.label}
-                  </li>
-                </Link>
-                <li className="px-2 mx-2 opacity-60 text-xs">{item.text}</li>
+                    <li
+                      className={classNames({
+                        "": true, //colors
+                        "flex gap-4 items-center ": true, //layout
+                        "transition-colors duration-300": true, //animation
+                        "rounded-md px-2 mx-2 text-xs ": true, //self style
+                      })}
+                    >
+                      <Icon icon={item.icon} width={20} />
+                      {item.label}
+                    </li>
+                  </Link>
+                  <li className="px-2 mx-2 opacity-60 text-xs">{item.text}</li>
+                </div>
               </>
             );
           })}
@@ -63,26 +64,27 @@ const Sidebar = ({ open, setOpen }) => {
           {navBottomItems.map((item, index) => {
             return (
               <>
-                <Link
-                  href={`${BASE_URL}${item.href}`}
-                  className={
-                    currentRoute === `${BASE_URL}${item.href}`
-                      ? "text-[#EFEF2E]"
-                      : "text-white"
-                  }
-                >
-                  <li
-                    key={index}
-                    className={classNames({
-                      "": true, //colors
-                      "flex gap-4 items-center ": true, //layout
-                      "transition-colors duration-300": true, //animation
-                      "rounded-md px-2 mx-2 text-xs ": true, //self style
-                    })}
+                <div key={index}>
+                  <Link
+                    href={`${BASE_URL}${item.href}`}
+                    className={
+                      currentRoute === `${BASE_URL}${item.href}`
+                        ? "text-[#EFEF2E]"
+                        : "text-white"
+                    }
                   >
-                    <Icon icon={item.icon} width={20} /> <p> {item.label}</p>
-                  </li>
-                </Link>
+                    <li
+                      className={classNames({
+                        "": true, //colors
+                        "flex gap-4 items-center ": true, //layout
+                        "transition-colors duration-300": true, //animation
+                        "rounded-md px-2 mx-2 text-xs ": true, //self style
+                      })}
+                    >
+                      <Icon icon={item.icon} width={20} /> <p> {item.label}</p>
+                    </li>
+                  </Link>
+                </div>
               </>
             );
           })}

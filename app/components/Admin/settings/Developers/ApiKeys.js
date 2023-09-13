@@ -33,20 +33,24 @@ const ApiKeys = () => {
   console.log(apiKey?.data?.data?.live_secret_key);
   const token = localStorage.getItem("token");
   const secretKey = apiKey?.data?.data?.live_secret_key;
+
   const publicKey = apiKey?.data?.data?.live_pub_key;
   const testSecretKey = apiKey?.data?.data?.test_secret_key;
   const testPublicKey = apiKey?.data?.data?.test_pub_key;
 
-  const handleKey = async (e) => {
-    e.preventDefault();
+  const handleKey = async () => {
     try {
       const endpoint = `${AppData.BASE_URL}settings/apikey`;
-      const response = await axios.post(endpoint, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.post(
+        endpoint,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       console.log(response);
     } catch (error) {
       console.log("Error", error);

@@ -82,17 +82,21 @@ const WebHooks = () => {
           <div className="">
             <form action="" onSubmit={handleSubmit(handleLiveWebhooks)}>
               <div className="">
-                <label htmlFor="">Url</label>
+                <label htmlFor=""> Live Url</label>
                 <br />
                 <InputField
                   register={register}
                   name={"live_url"}
                   type={"text"}
+                  wrapClass={"outline-none pb-5 w-1/2"}
                 />
+                <label htmlFor="">Test Url</label>
+                <br />
                 <InputField
                   register={register}
                   name={"test_url"}
                   type={"text"}
+                  wrapClass={" outline-none  w-1/2"}
                 />
                 {/* <input
                   type="text"

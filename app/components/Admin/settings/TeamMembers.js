@@ -12,7 +12,7 @@ const TeamMembers = () => {
   const [toastInfo, setToastInfo] = useState(null);
   const [teamMembers, setTeamMembers] = useState();
   const token = localStorage.getItem("token");
-  console.log(teamMembers?.data?.data);
+
   const data = teamMembers?.data?.data;
 
   useEffect(() => {
@@ -59,11 +59,15 @@ const TeamMembers = () => {
               <tbody className="bg-white border-b border-black ">
                 {data?.map((item, idx) => (
                   <tr key={idx}>
-                    <td>Namaa</td>
+                    <td>
+                      {item.user?.firstname} {item.user?.lastname}
+                    </td>
                     <td>{item.email}</td>
                     <td className="">
-                    <p className="bg-[#D1E4F8CB] text-[#0981FD]  py-1 text-center rounded-md"> {item.role}</p>
-    
+                      <p className="bg-[#D1E4F8CB] text-[#0981FD]  py-1 text-center rounded-md">
+                        {" "}
+                        {item.role}
+                      </p>
                     </td>
                   </tr>
                 ))}
