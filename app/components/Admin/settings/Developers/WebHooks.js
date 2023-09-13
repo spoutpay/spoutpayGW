@@ -1,9 +1,63 @@
 "use client";
 import React, { useState } from "react";
 import Checkbox from "../../CheckBox";
+import InputField from "@/app/components/InputField";
+import axios from "axios";
+import AppData from "../../../../config/appData.json";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import Toast from "../../../Toast";
 
 const WebHooks = () => {
   const [hooks, setHooks] = useState("1");
+  const token = localStorage.getItem("token");
+
+  const [toastInfo, setToastInfo] = useState(null);
+  const closeToast = () => {
+    setToastInfo(null);
+  };
+  const liveSchema = yup.object().shape({
+    live_url: yup.string().required(),
+    test_url: yup.string(),
+    resciveInJson: yup.boolean(),
+    enableRetries: yup.boolean(),
+    enableForFailed: yup.boolean(),
+    enableSendFromDashboard: yup.boolean(),
+  });
+
+  // const testSchema = yup.object().shape({
+  //   test_url: yup.string().required(),
+  // });
+
+  const handleLiveWebhooks = async (requestData) => {
+    try {
+      const endpoint = `${AppData.BASE_URL}settings/webhook`;
+      const response = await axios.post(endpoint, requestData, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(response);
+
+      setToastInfo({ message: response?.data?.data?.message, type: "success" });
+    } catch (error) {
+      console.log("Error", error);
+      // setMessage(error.response?.data?.error || "An error occurred");
+      setToastInfo({ message: "Error making the API call", type: "error" });
+    }
+  };
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(liveSchema),
+  });
+
   return (
     <div className="text-[#7E7E7E]">
       <p className="text-lg">Webhooks For Sanusi</p>
@@ -26,16 +80,26 @@ const WebHooks = () => {
       <div className="mt-5">
         {hooks == 1 ? (
           <div className="">
-            <form action="">
+            <form action="" onSubmit={handleSubmit(handleLiveWebhooks)}>
               <div className="">
                 <label htmlFor="">Url</label>
                 <br />
-                <input
+                <InputField
+                  register={register}
+                  name={"live_url"}
+                  type={"text"}
+                />
+                <InputField
+                  register={register}
+                  name={"test_url"}
+                  type={"text"}
+                />
+                {/* <input
                   type="text"
                   className="border border-[#7E7E7E]  outline-none p-2 w-[30rem]"
-                />
+                /> */}
               </div>
-              <div className="mt-5">
+              {/* <div className="mt-5">
                 <label htmlFor="" className="mt-5">
                   Secret Hash
                 </label>
@@ -44,39 +108,62 @@ const WebHooks = () => {
                   type="text"
                   className="border border-[#7E7E7E]  outline-none p-2 w-[30rem]"
                 />
-              </div>
+              </div> */}
 
               <div className="mt-5">
                 <p className="font-bold text-lg">Webhook Preferences</p>
                 <div className="flex items-center gap-2 mt-2">
-                  <Checkbox color="#000000" />
+                  <Checkbox
+                    color="#000000"
+                    register={register}
+                    name={"resciveInJson"}
+                    setValue={setValue}
+                  />
                   <label htmlFor="">
                     Receive Webhook Response In Json Format
                   </label>
                 </div>
                 <div className="flex items-center gap-2 mt-2">
-                  <Checkbox color="#000000" />
+                  <Checkbox
+                    color="#000000"
+                    name={"enableRetries"}
+                    register={register}
+                    setValue={setValue}
+                  />
                   <label htmlFor="">Enable Webhook Retries</label>
                 </div>
 
                 <div className="flex items-center gap-2 mt-2">
-                  <Checkbox color="#000000" />
+                  <Checkbox
+                    color="#000000"
+                    register={register}
+                    name={"enableForFailed"}
+                    setValue={setValue}
+                  />
                   <label htmlFor="">
                     Enable Webhook For Failed Transactions
                   </label>
                 </div>
-                <div className="flex items-center gap-2 mt-2">
+                {/* <div className="flex items-center gap-2 mt-2">
                   <Checkbox color="#000000" />
                   <label htmlFor="">Enable V3 Webhooks</label>
-                </div>
+                </div> */}
                 <div className="flex items-center gap-2 mt-2">
-                  <Checkbox color="#000000" />
+                  <Checkbox
+                    color="#000000"
+                    name={"enableSendFromDashboard"}
+                    register={register}
+                    setValue={setValue}
+                  />
                   <label htmlFor="">
                     Enable Resend Webhook From The Dashboard
                   </label>
                 </div>
               </div>
-              <button className="mt-5 bg-black text-white py-2 px-5">
+              <button
+                className="mt-5 bg-black text-white py-2 px-5"
+                type="submit"
+              >
                 {" "}
                 Save
               </button>
@@ -86,6 +173,13 @@ const WebHooks = () => {
           <div>hi</div>
         )}
       </div>
+      {toastInfo && (
+        <Toast
+          message={toastInfo.message}
+          type={toastInfo.type}
+          onClose={closeToast}
+        />
+      )}
     </div>
   );
 };

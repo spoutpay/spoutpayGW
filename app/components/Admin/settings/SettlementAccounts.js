@@ -24,7 +24,6 @@ import CustomDropdown from "../../CustomDropdown";
 import Dropdown from "../DropdownComponent";
 import BankDropdown from "../BankDropdown";
 import Toast from "../../Toast";
-import { data } from "autoprefixer";
 
 const SettlementAccounts = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -43,9 +42,6 @@ const SettlementAccounts = () => {
   const [accounts, setAccounts] = useState("");
   console.log(accounts?.data?.data);
   const data = accounts.data?.data;
-  const currency = accounts?.data?.data.currency;
-  const account_number = accounts?.data?.data.account_number;
-  const bank_code = accounts?.data?.data.bank_code;
 
   const handleAccounts = async (requestData) => {
     try {

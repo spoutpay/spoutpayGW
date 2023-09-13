@@ -138,10 +138,11 @@ const Payment = () => {
                 <section className="group">
                   <div className="p-5 border border-[#707070] rounded-md  group-hover:bg-[#F4F9FF] group-hover:border-[#0981FC] ">
                     <div className="flex justify-end">
-                      <Checkbox
+                      {/* <Checkbox
+                       
                         initialValue={false}
                         buttonClassName={"items-end"}
-                      />
+                      /> */}
                     </div>
                     <span className="flex justify-center mx-auto py-5 group-hover:text-[#0981FC]">
                       <Icon
@@ -161,10 +162,10 @@ const Payment = () => {
                 <section className="group ">
                   <div className="p-5 border border-[#707070] rounded-md group-hover:bg-[#F4F9FF] group-hover:border-[#0981FC]">
                     <div className="flex justify-end">
-                      <Checkbox
+                      {/* <Checkbox
                         initialValue={false}
                         buttonClassName={"items-end"}
-                      />
+                      /> */}
                     </div>
                     <span className="flex justify-center mx-auto py-5 group-hover:text-[#0981FC]">
                       <Icon
@@ -183,10 +184,10 @@ const Payment = () => {
                 <section className="group ">
                   <div className="p-5 border border-[#707070] rounded-md group-hover:bg-[#F4F9FF] group-hover:border-[#0981FC]">
                     <div className="flex justify-end">
-                      <Checkbox
+                      {/* <Checkbox
                         initialValue={false}
                         buttonClassName={"items-end"}
-                      />
+                      /> */}
                     </div>
                     <span className="flex justify-center mx-auto py-5 group-hover:text-[#0981FC]">
                       <Icon icon="system-uicons:box-open" width={40} />

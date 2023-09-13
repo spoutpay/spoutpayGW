@@ -88,6 +88,7 @@ const ApiKeys = () => {
         </ul>
       </div>
       <div className="mt-5">
+        {/* Live Keys */}
         {key == 1 ? (
           <div className="">
             <form action="">
@@ -109,6 +110,13 @@ const ApiKeys = () => {
                   {livePublicKeyCopied ? "Copied" : "Copy"}
                 </button>
               </div>
+
+              <p className="text-sm text-[#BC7D27] w-[30rem] mb-20">
+                For The Safety Of Your Account, When You Generate A Secret Key
+                You Will Only Be Able To See And Download It Once. If A New
+                Secret Key Is Generated, It Needs To Be Replaced Everywhere It
+                Exists.
+              </p>
               <div className="mt-5">
                 <label htmlFor="" className="mt-5">
                   Secret Key
@@ -116,14 +124,15 @@ const ApiKeys = () => {
                 <br />
                 <input
                   type="text"
-                  defaultValue={secretKey}
-                  value={secretKey}
+                  value={
+                    liveSecretKeyCopied ? "*******************" : secretKey
+                  }
                   disabled={true}
                   className="border border-[#7E7E7E] bg-[#F2F2F2] outline-none p-2 w-[25rem]"
                 />
                 <button
                   onClick={copySecretKey}
-                  disabled={!secretKey}
+                  disabled={liveSecretKeyCopied ? true : false}
                   className="bg-[#7E7E7E] text-white py-[9px] px-5 hover:bg-black"
                   type="button"
                 >
@@ -157,6 +166,7 @@ const ApiKeys = () => {
           </div>
         ) : (
           <div className="">
+            {/* test keys */}
             <form action="">
               <div className="">
                 <label htmlFor="">Public Key</label>
