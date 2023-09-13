@@ -1,7 +1,8 @@
 "use client";
 
 import { updateCardData } from "../redux/features/cardSlice";
-import { useDispatch } from "react-redux";
+import { updateSwitchConfig } from "../redux/features/switchSlice";
+import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -15,6 +16,8 @@ import isValidExpiry from "@/app/utils/ValidateExpiryDate";
 import Image from "next/image";
 import Button from "@/app/components/Button";
 import CardPin from "./card/CardPin";
+import AppData from "../config/appData.json";
+import axios from "axios";
 
 const inputClassNames =
   "w-full border px-2.5 pt-6 pb-2.5 rounded text-xs text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-input-focus";
@@ -30,6 +33,7 @@ const imageSrc = {
 
 export default function Checkout() {
   const dispatch = useDispatch();
+  const switchName = useSelector((state) => state?.switch?.value?.switchConfig);
   const amount = 100;
   const [loading, setLoading] = useState(false);
   const [cardNumber, setCardNumber] = useState("");
@@ -85,7 +89,6 @@ export default function Checkout() {
     try {
       setLoading(true);
       await new Promise((resolve) => setTimeout(resolve, 1500));
-      // setCardData(data);
       dispatch(updateCardData(data));
       setEnterpin(true);
     } catch (error) {
@@ -94,6 +97,26 @@ export default function Checkout() {
       setLoading(false);
     }
   };
+
+  const getSwitchConfig = async () => {
+    try {
+      const endpoint = `${AppData.BASE_URL}settings/switch`;
+      const response = await axios.get(endpoint, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      dispatch(updateSwitchConfig(response.data.data));
+    } catch (error) {
+      console.error("Error", error);
+    }
+  };
+
+  useEffect(() => {
+    getSwitchConfig();
+  }, []);
+
+  // console.log("switch", switchName?.name);
 
   return (
     <div className="flex item-center text-center justify-center mt-8">
