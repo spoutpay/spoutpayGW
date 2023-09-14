@@ -19,6 +19,11 @@ const Navigation = ({ navItems }) => {
     setActiveNav(index);
   };
 
+  const imageStyle = {
+    width: "20px",
+    height: "20px",
+  };
+
   return (
     <ul>
       {navItems.map((nav, i) => {
@@ -33,8 +38,9 @@ const Navigation = ({ navItems }) => {
               <div className={nav.navItemClass}>
                 <Image
                   src={nav.imageSrc}
-                  width={20}
-                  height={20}
+                  style={imageStyle}
+                  width="0"
+                  height="0"
                   alt={nav.name}
                 />
               </div>

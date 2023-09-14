@@ -14,7 +14,7 @@ export default function PayAttitude() {
             type="text"
             placeholder="0000 000 0000"
           />
-          <Image />
+          {/* <Image /> */}
         </div>
         <Button variant="tulip" type="submit" text="Continue" />
       </div>

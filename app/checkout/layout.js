@@ -43,8 +43,10 @@ export default function RootLayout({ children }) {
               <Image
                 src="/spout-logo-dark.svg"
                 alt="Spout"
-                width={80}
-                height={80}
+                width="0"
+                height="0"
+                style={{ width: "60px", height: "60px" }}
+                priority={true}
               />
             </div>
           </nav>

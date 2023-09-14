@@ -1,9 +1,11 @@
+import { useSelector } from "react-redux";
 import React, { useState, useEffect, useRef } from "react";
 import CryptoJS from "crypto-js";
 
 const SECRET_KEY = "16CharacterKey!!";
 
-function Upsl({ response }) {
+function Upsl({response}) {
+  // const response = useSelector((state) => state.card.apiResponse.data);
   const [decryptedText, setDecryptedText] = useState("");
   const [encryptedVal, setEncryptedVal] = useState("");
   const formRef = useRef(null);
@@ -22,23 +24,23 @@ function Upsl({ response }) {
       const dataToString = decryptedData.toString(CryptoJS.enc.Utf8);
       const parsedData = JSON.parse(dataToString);
       console.log("res", response.data.OrderId);
-      const combinedData = {
-        transData: parsedData,
-        orderID: response?.data?.OrderId,
-        sessionID: response?.data?.SessionId,
-      };
+      const combinedData = {};
 
-      localStorage.setItem("encryptCombinedData", JSON.stringify(combinedData));
-      console.log("combinedData", combinedData);
+      if (response && response.data) {
+        combinedData.transData = parsedData;
+        combinedData.orderID = response.data.OrderId;
+        combinedData.sessionID = response.data.SessionId;
+      }
+      localStorage.setItem("encryptedData", JSON.stringify(combinedData));
 
-      const encryptedDataResult = CryptoJS.AES.encrypt(
-        JSON.stringify(combinedData),
-        SECRET_KEY,
-        {
-          mode: CryptoJS.mode.ECB,
-        }
-      );
-      setEncryptedVal(encryptedDataResult.toString());
+      // const encryptedDataResult = CryptoJS.AES.encrypt(
+      //   JSON.stringify(combinedData),
+      //   SECRET_KEY,
+      //   {
+      //     mode: CryptoJS.mode.ECB,
+      //   }
+      // );
+      // setEncryptedVal(encryptedDataResult.toString());
     } catch (error) {
       console.error("Error:", error);
     }
@@ -46,7 +48,7 @@ function Upsl({ response }) {
     formRef.current.submit();
   }, []);
 
-  // localStorage.setItem("encryptCombinedData", combinedData);
+  // localStorage.setItem("encryptedData", combinedData);
 
   return (
     <>

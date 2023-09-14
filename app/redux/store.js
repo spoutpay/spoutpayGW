@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import cardReducer from "./features/cardSlice";
-import overviewReducer from "./features/Admin/overviewSlice";
+import switchReducer from "./features/switchSlice";
 
 export default configureStore({
   reducer: {
     card: cardReducer,
-    overview: overviewReducer,
+    switch: switchReducer,
   },
 });
