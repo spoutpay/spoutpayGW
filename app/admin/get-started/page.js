@@ -8,8 +8,7 @@ import { useSelector } from "react-redux";
 
 const GetStarted = () => {
   const options = [{ label: "Option 1", value: "option1" }];
-  const { name } = useSelector((state) => state.overview);
-  console.log(name);
+
   const [selectedValue, setSelectedValue] = useState(null);
 
   const handleSelect = (option) => {
