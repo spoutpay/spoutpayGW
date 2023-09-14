@@ -1,9 +1,17 @@
-"use client";
+"use client"
+
+// Constants
+const CARD_TYPES = {
+  Mastercard: "/master-card.png",
+  Verve: "/verve.png",
+  Visa: "/visa.png",
+};
 
 import { updateCardData } from "../redux/features/cardSlice";
 import { updateSwitchConfig } from "../redux/features/switchSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -18,6 +26,8 @@ import Button from "@/app/components/Button";
 import CardPin from "./card/CardPin";
 import AppData from "../config/appData.json";
 import axios from "axios";
+import Upsl from "./card/Upsl";
+import CryptoJS from "crypto-js";
 
 const inputClassNames =
   "w-full border px-2.5 pt-6 pb-2.5 rounded text-xs text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-input-focus";
@@ -25,20 +35,34 @@ const inputClassNames =
 const labelClassName =
   "block text-gray-700 mb-2 absolute start-2.5 top-2 text-xs uppercase";
 
-const imageSrc = {
-  Mastercard: "/master-card.png",
-  Verve: "/verve.png",
-  Visa: "/visa.png",
-};
-
 export default function Checkout() {
   const dispatch = useDispatch();
   const switchName = useSelector((state) => state?.switch?.value?.switchConfig);
   const amount = 100;
   const [loading, setLoading] = useState(false);
+  const [isValidateOtp, setIsValidateOtp] = useState(false);
+  const [responseData, setResponseData] = useState({});
   const [cardNumber, setCardNumber] = useState("");
   const [cardType, setCardType] = useState("");
   const [enterPin, setEnterpin] = useState(false);
+  const router = useRouter();
+
+  const [encryptedText, setEncryptedText] = useState("");
+  const secretKey = "16CharacterKey!!";
+
+  const getSwitchConfig = async () => {
+    try {
+      const endpoint = `${AppData.BASE_URL}settings/switch`;
+      const response = await axios.get(endpoint, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      dispatch(updateSwitchConfig(response.data.data.name));
+    } catch (error) {
+      console.error("Error", error);
+    }
+  };
 
   const handleCardNumberChange = (event) => {
     const formattedValue = formatCardNumber(event.target.value);
@@ -69,7 +93,7 @@ export default function Checkout() {
       .string()
       .required("Card expiry is required")
       .test("valid-expiry", "Invalid card expiry", (value) => {
-        return value ? isValidExpiry(value) : true; // Implement the isValidExpiry function to validate the card expiry
+        return value ? isValidExpiry(value) : true;
       }),
     cvv: yup
       .string()
@@ -85,30 +109,76 @@ export default function Checkout() {
     resolver: yupResolver(PaymentSchema),
   });
 
-  const onSubmit = async (data) => {
+  const submitUpslData = async (data) => {
+    console.log("upsl data", data)
+    const endpoint = `${AppData.BASE_URL}upsl/process`;
+    let offset = new Date().getTimezoneOffset();
+    let w = window.innerWidth;
+    let h = window.innerHeight;
+    let userLang = navigator.language;
+    let depth = screen.colorDepth;
+    let agent = navigator.userAgent;
+    let java = navigator.javaEnabled();
+    const requestData = {
+      data,
+      extra: {
+        browserColorDepth: depth,
+        browserLanguage: userLang,
+        browserScreenHeight: h,
+        browserScreenWidth: w,
+        browserTZ: offset,
+        browserUserAgent: agent,
+        browserJavaEnabled: java,
+      },
+    };
+
+    try {
+      setLoading(true);
+
+      const encryptedDataResult = CryptoJS.AES.encrypt(
+        JSON.stringify(data),
+        secretKey,
+        {
+          mode: CryptoJS.mode.ECB,
+        }
+      );
+      setEncryptedText(encryptedDataResult.toString());
+
+      const response = await axios.post(endpoint, requestData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      dispatch(updateCardData(response.data));
+      console.log("response data", response.data)
+      setResponseData(response.data);
+      setEnterpin(true);
+    } catch (error) {
+      console.error("Error while processing UPSL data:", error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const submitISWData = async (data) => {
     try {
       setLoading(true);
       await new Promise((resolve) => setTimeout(resolve, 1500));
       dispatch(updateCardData(data));
       setEnterpin(true);
     } catch (error) {
-      console.error("Payment processing error:", error);
+      console.error("Error while processing other data:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  const getSwitchConfig = async () => {
-    try {
-      const endpoint = `${AppData.BASE_URL}settings/switch`;
-      const response = await axios.get(endpoint, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      dispatch(updateSwitchConfig(response.data.data));
-    } catch (error) {
-      console.error("Error", error);
+  const onSubmit = async (data) => {
+    if (switchName === "upsl") {
+      await submitUpslData(data);
+    } else {
+      await submitISWData(data);
     }
   };
 
@@ -116,7 +186,9 @@ export default function Checkout() {
     getSwitchConfig();
   }, []);
 
-  // console.log("switch", switchName?.name);
+  useEffect(() => {
+    localStorage.setItem("encryptedData", encryptedText);
+  }, [encryptedText]);
 
   return (
     <div className="flex item-center text-center justify-center mt-8">
@@ -131,9 +203,9 @@ export default function Checkout() {
               {cardType && cardType !== "Unknown" && (
                 <div className="absolute top-4 right-4">
                   <Image
-                    src={imageSrc[cardType]}
-                    height={30}
-                    width={50}
+                    src={CARD_TYPES[cardType]}
+                    height="30"
+                    width="50"
                     alt="card"
                   />
                 </div>
@@ -199,7 +271,9 @@ export default function Checkout() {
           />
         </form>
       ) : (
-        <CardPin cardType={cardType} />
+        <>
+          {switchName === "upsl" ? <Upsl response={responseData} /> : <CardPin cardType={cardType} />}
+        </>
       )}
     </div>
   );

@@ -10,14 +10,20 @@ export default function Status({ message }) {
 
   useEffect(() => {
     localStorage.removeItem("encryptedData");
-  })
+  });
 
   return (
     <div className="text-center">
       {message === "success" ? (
         <>
           <div>
-            <Image src="/success.svg" height={250} width={250} alt="success" />
+            <Image
+              src="/success.svg"
+              height="0"
+              width="0"
+              alt="success"
+              style={{ width: "250px", height: "250px" }}
+            />
           </div>
           <div className="mt-6">
             <Button
@@ -30,7 +36,13 @@ export default function Status({ message }) {
       ) : (
         <>
           <div>
-            <Image src="/failed.svg" height={250} width={250} alt="success" />
+            <Image
+              src="/failed.svg"
+              height="0"
+              width="0"
+              alt="success"
+              style={{ width: "250px", height: "250px" }}
+            />
           </div>
           <div className="mt-6">
             <Button

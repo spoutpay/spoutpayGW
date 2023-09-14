@@ -39,9 +39,10 @@ export default function Finalize() {
   useEffect(() => {
     postData();
   }, []);
+  
 
   return (
-    <div className="text-center flex mt-16 justify-center items-center">
+    <div className="text-center flex mt-3 justify-center items-center">
       {!isProccessed ? <p>Loading...</p> : <Status message={processedMsg} />}
     </div>
   );

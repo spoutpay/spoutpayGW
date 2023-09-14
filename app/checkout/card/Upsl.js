@@ -1,9 +1,11 @@
+import { useSelector } from "react-redux";
 import React, { useState, useEffect, useRef } from "react";
 import CryptoJS from "crypto-js";
 
 const SECRET_KEY = "16CharacterKey!!";
 
-function Upsl({ response }) {
+function Upsl({response}) {
+  // const response = useSelector((state) => state.card.apiResponse.data);
   const [decryptedText, setDecryptedText] = useState("");
   const [encryptedVal, setEncryptedVal] = useState("");
   const formRef = useRef(null);
@@ -30,16 +32,15 @@ function Upsl({ response }) {
         combinedData.sessionID = response.data.SessionId;
       }
       localStorage.setItem("encryptedData", JSON.stringify(combinedData));
-      // console.log("combinedData", combinedData);
 
-      const encryptedDataResult = CryptoJS.AES.encrypt(
-        JSON.stringify(combinedData),
-        SECRET_KEY,
-        {
-          mode: CryptoJS.mode.ECB,
-        }
-      );
-      setEncryptedVal(encryptedDataResult.toString());
+      // const encryptedDataResult = CryptoJS.AES.encrypt(
+      //   JSON.stringify(combinedData),
+      //   SECRET_KEY,
+      //   {
+      //     mode: CryptoJS.mode.ECB,
+      //   }
+      // );
+      // setEncryptedVal(encryptedDataResult.toString());
     } catch (error) {
       console.error("Error:", error);
     }
