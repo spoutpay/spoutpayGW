@@ -1,7 +1,7 @@
 "use client";
 
 import { useSelector, useDispatch } from "react-redux";
-import { cardDataResponse } from "@/app/redux/features/cardSlice";
+import { cardDataResponse } from "../../redux/features/cardSlice";
 import Button from "@/app/components/Button";
 import { useState } from "react";
 import { useForm } from "react-hook-form";

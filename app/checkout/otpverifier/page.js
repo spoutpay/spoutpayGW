@@ -12,15 +12,19 @@ import Button from "../../components/Button";
 import Status from "../status/Status";
 
 export default function OtpVerifier() {
-  const response = useSelector((state) => state.card.apiResponse.data);
+  const response = useSelector((state) => state.card.apiResponse?.data ?? null);
   const requestAmount = "80";
   const [loading, setLoading] = useState(false);
   const [otp, setOtp] = useState("");
   const [isProccessed, setIsProcessed] = useState(false);
   const [processedMsg, setProcessedMsg] = useState("");
 
-  const { message, paymentId, plainTextSupportMessage, transactionRef } =
-    response;
+  let message, paymentId, plainTextSupportMessage, transactionRef;
+
+  if (response !== null) {
+    ({ message, paymentId, plainTextSupportMessage, transactionRef } =
+      response);
+  }
 
   const schema = yup.object().shape({
     transactionRef: yup.string().default(transactionRef),
