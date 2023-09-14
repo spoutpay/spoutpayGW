@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useTable } from "react-table";
+
 import ButtonWithIcon from "../ButtonWithIcon";
 import AppData from "../../../config/appData.json";
-import { bankData } from "../../BankCode";
+
 import axios from "axios";
 import { Icon } from "@iconify/react";
 import {
@@ -18,10 +18,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import InputField from "../../InputField";
 import { useForm } from "react-hook-form";
-import CountryDropdown from "../CountryDropdown";
-import CurrencyInput from "../CurrencyInput";
 import CustomDropdown from "../../CustomDropdown";
-import Dropdown from "../DropdownComponent";
 import BankDropdown from "../BankDropdown";
 import Toast from "../../Toast";
 
@@ -64,7 +61,7 @@ const SettlementAccounts = () => {
 
   useEffect(() => {
     axios
-      .get(`${AppData.BASE_URL}settings/all-settlement-accounts`, {
+      .get(`${AppData.BASE_URL}transactions/history`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,

@@ -26,7 +26,7 @@ const Sidebar = ({ open, setOpen }) => {
     >
       <nav className="md:sticky top-0 md:top-16">
         {/* nav items */}
-        <ul className=" pl-5 flex flex-col gap-2 gap-y-2 mt-10">
+        <ul className=" pl-5 flex flex-col gap-2  mt-10">
           {navItems.map((item, index) => {
             return (
               <>
@@ -48,10 +48,12 @@ const Sidebar = ({ open, setOpen }) => {
                       })}
                     >
                       <Icon icon={item.icon} width={20} />
-                      {item.label}
+                      <p>{item.label}</p>
                     </li>
                   </Link>
-                  <li className="px-2 mx-2 opacity-60 text-xs">{item.text}</li>
+                  <li className="px-2 mx-2 opacity-60 text-xs text-[#AAAAAA] ">
+                    <p className="">{item.text}</p>
+                  </li>
                 </div>
               </>
             );

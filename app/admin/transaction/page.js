@@ -3,28 +3,37 @@ import ButtonWithIcon from "@/app/components/Admin/ButtonWithIcon";
 import Dropdown from "@/app/components/Admin/DropdownComponent";
 import InputWithIcon from "@/app/components/Admin/InputWithIcon";
 import { Icon } from "@iconify/react";
-import React, { useState } from "react";
-import { useTable } from "react-table";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import AppData from "../../config/appData.json";
+import { formatDate } from "@/app/utils/FormatDate";
 
 const Transaction = () => {
   const options = [{ label: "Option 1", value: "option1" }];
+  const token = localStorage.getItem("token");
+  const [transactions, setTransactions] = useState("");
+  console.log(transactions?.data?.data);
+  const data = transactions?.data?.data;
   const [selectedValue, setSelectedValue] = useState(null);
 
   const handleSelect = (option) => {
     setSelectedValue(option.value);
   };
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    getToggleRowSelectedProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = useTable({
-    columns,
-    data,
-  });
+  useEffect(() => {
+    axios
+      .get(`${AppData.BASE_URL}transactions/history`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(function (response) {
+        console.log(response);
+        setTransactions(response);
+      })
+      .catch(function (error) {});
+  }, []);
 
   return (
     <div className="">
@@ -72,34 +81,44 @@ const Transaction = () => {
       {/* Table */}
       <div className="w-full w3-container w3-responsive">
         {" "}
-        <table {...getTableProps()} className="w3-table w3-bordered  ">
+        <table className="w3-table w3-bordered  ">
           <thead className="bg-[#F9FBFC]">
-            {headerGroups.map((headerGroup, index) => (
-              <tr key={index} {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column, idx) => (
-                  <th key={idx} {...column.getHeaderProps()}>
-                    {column.render("Header")}
-                  </th>
-                ))}
-              </tr>
-            ))}
+            <tr>
+              {columns.map((i, idx) => (
+                <th key={idx}>{i.Header}</th>
+              ))}
+            </tr>
           </thead>
 
-          <tbody {...getTableBodyProps()} className="bg-white">
-            {rows.map((row, id) => {
-              prepareRow(row);
-              return (
-                <tr key={id} {...row.getRowProps()}>
-                  {row.cells.map((cell, index) => {
-                    return (
-                      <td key={index} {...cell.getCellProps()}>
-                        {cell.render("Cell")}
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
+          <tbody className="bg-white w-full text-sm">
+            {data?.map((item, idx) => (
+              <tr key={idx}>
+                <td>
+                  <Icon icon="system-uicons:checkbox-empty" width={30} />
+                </td>
+                <td>{item.email_address}</td>
+                <td>{item.request_type}</td>
+                <td>₦{item.amount}</td>
+                <td>{item.spout_tx_ref}</td>
+                <td>pending</td>
+                <td>{item.redirect_url}</td>
+                <td></td>
+                <td>{formatDate(item.createdAt)}</td>
+                <div className="flex items-center ">
+                  <button>
+                    <Icon
+                      icon="ic:baseline-download"
+                      color="#0b80fa"
+                      width={25}
+                    />
+                  </button>
+
+                  <button className="text-xs">
+                    <Icon icon="icomoon-free:bin" color="#8b8b8b" width={25} />
+                  </button>
+                </div>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

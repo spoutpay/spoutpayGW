@@ -19,11 +19,11 @@ const WebHooks = () => {
   };
   const liveSchema = yup.object().shape({
     live_url: yup.string().required(),
-    test_url: yup.string(),
-    resciveInJson: yup.boolean(),
-    enableRetries: yup.boolean(),
-    enableForFailed: yup.boolean(),
-    enableSendFromDashboard: yup.boolean(),
+    test_url: yup.string().required(),
+    resciveInJson: yup.boolean().required(),
+    enableRetries: yup.boolean().required(),
+    enableForFailed: yup.boolean().required(),
+    enableSendFromDashboard: yup.boolean().required(),
   });
 
   // const testSchema = yup.object().shape({

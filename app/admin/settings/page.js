@@ -4,6 +4,7 @@ import Developers from "@/app/components/Admin/settings/Developers";
 import Profile from "@/app/components/Admin/settings/Profile";
 import SetPermissions from "@/app/components/Admin/settings/SetPermissions";
 import SettlementAccounts from "@/app/components/Admin/settings/SettlementAccounts";
+import Switches from "@/app/components/Admin/settings/Switches";
 import TeamMembers from "@/app/components/Admin/settings/TeamMembers";
 import WhitelistedAddresses from "@/app/components/Admin/settings/WhitelistedAddresses";
 import React, { useState } from "react";
@@ -27,6 +28,8 @@ const Settings = () => {
         return <WhitelistedAddresses />;
       case 7:
         return <Developers />;
+      case 8:
+        return <Switches />;
       default:
         return <Profile />;
     }
@@ -75,6 +78,12 @@ const Settings = () => {
           className={`${currentScreen == 7 ? " text-black font-bold " : ""}`}
         >
           Developers
+        </li>
+        <li
+          onClick={() => setCurrentScreen(8)}
+          className={`${currentScreen == 8 ? " text-black font-bold " : ""}`}
+        >
+          Switches
         </li>
       </ul>
       <div className="px-10">{SettingsComponent()}</div>
