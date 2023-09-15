@@ -8,18 +8,22 @@ import AppData from "../../../config/appData.json";
 import * as yup from "yup";
 
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Toast from "@/app/components/Toast";
 import InputField from "@/app/components/InputField";
 
 const NewMembers = () => {
   const router = useRouter();
+  const [token, setToken] = useState("");
 
   const [toastInfo, setToastInfo] = useState(null);
   const closeToast = () => {
     setToastInfo(null);
   };
-  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    setToken(localStorage.getItem("token"));
+  }, []);
 
   const options = [
     { option: "Owner", value: "owner" },

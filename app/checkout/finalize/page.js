@@ -10,13 +10,15 @@ import Status from "../status/Status";
 export default function Finalize() {
   const router = useSearchParams();
   const [isProccessed, setIsProcessed] = useState(false);
+  const [requestData, setRequestData] = useState();
   const [processedMsg, setProcessedMsg] = useState("");
   const param = router.get("cres");
   const SECRET_KEY = "16CharacterKey!!";
 
   console.log("processedMsg", processedMsg, param);
-
-  const requestData = localStorage.getItem("encryptedData");
+  useEffect(() => {
+    setRequestData(localStorage.getItem("encryptedData"));
+  }, []);
 
   const data = JSON.parse(requestData);
   data.cres = param;
@@ -39,7 +41,6 @@ export default function Finalize() {
   useEffect(() => {
     postData();
   }, []);
-  
 
   return (
     <div className="text-center flex mt-3 justify-center items-center">

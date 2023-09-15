@@ -6,6 +6,7 @@ import axios from "axios";
 const ApiKeys = () => {
   const [key, setKey] = useState("1");
   const [apiKey, setApiKey] = useState("");
+  const [token, setToken] = useState();
   const [livePublicKeyCopied, setLivePublicKeyCopied] = useState(false);
   const [liveSecretKeyCopied, setLiveSecretKeyCopied] = useState(false);
   const [testPublicKeyCopied, setTestPublicKeyCopied] = useState(false);
@@ -31,12 +32,16 @@ const ApiKeys = () => {
   };
 
   console.log(apiKey?.data?.data?.live_secret_key);
-  const token = localStorage.getItem("token");
+
   const secretKey = apiKey?.data?.data?.live_secret_key;
 
   const publicKey = apiKey?.data?.data?.live_pub_key;
   const testSecretKey = apiKey?.data?.data?.test_secret_key;
   const testPublicKey = apiKey?.data?.data?.test_pub_key;
+
+  useEffect(() => {
+    setToken(localStorage.getItem("token"));
+  }, []);
 
   const handleKey = async () => {
     try {

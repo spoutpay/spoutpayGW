@@ -61,7 +61,7 @@ const SettlementAccounts = () => {
 
   useEffect(() => {
     axios
-      .get(`${AppData.BASE_URL}transactions/history`, {
+      .get(`${AppData.BASE_URL}settings/all-settlement-accounts`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,

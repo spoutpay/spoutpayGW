@@ -9,8 +9,9 @@ import AppData from "../../config/appData.json";
 import { formatDate } from "@/app/utils/FormatDate";
 
 const Transaction = () => {
+  const [token, setToken] = useState();
   const options = [{ label: "Option 1", value: "option1" }];
-  const token = localStorage.getItem("token");
+
   const [transactions, setTransactions] = useState("");
   console.log(transactions?.data?.data);
   const data = transactions?.data?.data;
@@ -21,6 +22,7 @@ const Transaction = () => {
   };
 
   useEffect(() => {
+    setToken(localStorage.getItem("token"));
     axios
       .get(`${AppData.BASE_URL}transactions/history`, {
         headers: {

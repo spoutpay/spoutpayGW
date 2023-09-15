@@ -10,12 +10,14 @@ const TeamMembers = () => {
   const router = useRouter();
   const [message, setMessage] = useState("");
   const [toastInfo, setToastInfo] = useState(null);
+  const [token, setToken] = useState();
   const [teamMembers, setTeamMembers] = useState();
-  const token = localStorage.getItem("token");
 
   const data = teamMembers?.data?.data;
 
   useEffect(() => {
+    setToken(localStorage.getItem("token"));
+
     axios
       .get(`${AppData.BASE_URL}settings/all-members`, {
         headers: {
