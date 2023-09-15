@@ -21,6 +21,7 @@ import Toast from "../../Toast";
 const WhitelistedAddresses = () => {
   const [message, setMessage] = useState("");
   const [toastInfo, setToastInfo] = useState(null);
+  const [token, setToken] = useState();
   const [ipData, setIpData] = useState("");
 
   const closeToast = () => {
@@ -28,7 +29,9 @@ const WhitelistedAddresses = () => {
   };
   const data = ipData?.data?.data?.allow_ip;
 
-  const token = localStorage.getItem("token");
+  useEffect(() => {
+    setToken(localStorage.getItem("token"));
+  }, []);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 

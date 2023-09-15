@@ -25,6 +25,7 @@ import Toast from "../../Toast";
 const SettlementAccounts = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [toastInfo, setToastInfo] = useState(null);
+  const [token, setToken] = useState();
   const closeToast = () => {
     setToastInfo(null);
   };
@@ -35,7 +36,10 @@ const SettlementAccounts = () => {
     account_number: yup.string().required("account number is required!"),
   });
 
-  const token = localStorage.getItem("token");
+  useEffect(() => {
+    setToken(localStorage.getItem("token"));
+  }, []);
+
   const [accounts, setAccounts] = useState("");
   console.log(accounts?.data?.data);
   const data = accounts.data?.data;

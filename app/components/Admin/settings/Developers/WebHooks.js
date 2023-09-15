@@ -11,7 +11,11 @@ import Toast from "../../../Toast";
 
 const WebHooks = () => {
   const [hooks, setHooks] = useState("1");
-  const token = localStorage.getItem("token");
+  const [token, setToken] = useState();
+
+  useEffect(() => {
+    setToken(localStorage.getItem("token"));
+  }, []);
 
   const [toastInfo, setToastInfo] = useState(null);
   const closeToast = () => {
