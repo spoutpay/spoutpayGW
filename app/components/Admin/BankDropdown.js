@@ -9,7 +9,7 @@ const BankDropdown = ({ name, setValue, register }) => {
 
   useEffect(() => {
     register(name);
-    console.log("Is registered", register); // Register the dropdown input with useForm
+    console.log("Is register", register); // Register the dropdown input with useForm
   }, [name, register]);
 
   const handleOptionClick = (selectedValue) => {
