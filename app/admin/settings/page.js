@@ -2,7 +2,7 @@
 import BusinessPreferences from "@/app/components/Admin/settings/BusinessPreferences";
 import Developers from "@/app/components/Admin/settings/Developers";
 import Profile from "@/app/components/Admin/settings/Profile";
-import SetPermissions from "@/app/components/Admin/settings/SetPermissions";
+
 import SettlementAccounts from "@/app/components/Admin/settings/SettlementAccounts";
 import Switches from "@/app/components/Admin/settings/Switches";
 import TeamMembers from "@/app/components/Admin/settings/TeamMembers";
@@ -22,13 +22,12 @@ const Settings = () => {
         return <SettlementAccounts />;
       case 4:
         return <TeamMembers />;
+
       case 5:
-        return <SetPermissions />;
-      case 6:
         return <WhitelistedAddresses />;
-      case 7:
+      case 6:
         return <Developers />;
-      case 8:
+      case 7:
         return <Switches />;
       default:
         return <Profile />;
@@ -61,27 +60,22 @@ const Settings = () => {
         >
           Team Members
         </li>
+
         <li
           onClick={() => setCurrentScreen(5)}
           className={`${currentScreen == 5 ? " text-black font-bold " : ""}`}
         >
-          Set Permissions
+          Whitelisted Address
         </li>
         <li
           onClick={() => setCurrentScreen(6)}
           className={`${currentScreen == 6 ? " text-black font-bold " : ""}`}
         >
-          Whitelisted Address
+          Developers
         </li>
         <li
           onClick={() => setCurrentScreen(7)}
           className={`${currentScreen == 7 ? " text-black font-bold " : ""}`}
-        >
-          Developers
-        </li>
-        <li
-          onClick={() => setCurrentScreen(8)}
-          className={`${currentScreen == 8 ? " text-black font-bold " : ""}`}
         >
           Switches
         </li>

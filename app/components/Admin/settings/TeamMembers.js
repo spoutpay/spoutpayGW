@@ -10,14 +10,11 @@ const TeamMembers = () => {
   const router = useRouter();
   const [message, setMessage] = useState("");
   const [toastInfo, setToastInfo] = useState(null);
-  const [token, setToken] = useState();
+
   const [teamMembers, setTeamMembers] = useState();
-
   const data = teamMembers?.data?.data;
-
+  const token = localStorage.getItem("token");
   useEffect(() => {
-    setToken(localStorage.getItem("token"));
-
     axios
       .get(`${AppData.BASE_URL}settings/all-members`, {
         headers: {
@@ -66,7 +63,7 @@ const TeamMembers = () => {
                     </td>
                     <td>{item.email}</td>
                     <td className="">
-                      <p className="bg-[#D1E4F8CB] text-[#0981FD]  py-1 text-center rounded-md">
+                      <p className="bg-[#D1E4F8CB] text-[#0981FD]  px-2 py-1 text-center rounded-md">
                         {" "}
                         {item.role}
                       </p>
