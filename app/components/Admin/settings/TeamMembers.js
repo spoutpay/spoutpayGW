@@ -10,11 +10,12 @@ const TeamMembers = () => {
   const router = useRouter();
   const [message, setMessage] = useState("");
   const [toastInfo, setToastInfo] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(false);
   const [teamMembers, setTeamMembers] = useState();
   const data = teamMembers?.data?.data;
   const token = localStorage.getItem("token");
   useEffect(() => {
+    setIsLoading(true);
     axios
       .get(`${AppData.BASE_URL}settings/all-members`, {
         headers: {
@@ -24,6 +25,7 @@ const TeamMembers = () => {
       })
       .then(function (response) {
         setTeamMembers(response);
+        setIsLoading(false);
       })
       .catch(function (error) {});
     console.log("ran");
@@ -45,33 +47,36 @@ const TeamMembers = () => {
         <p>Team Members - 1</p>
         <div className="flex">
           <div className=" w-1/2 w3-responsive">
-            {" "}
-            <table className="w3-table    ">
-              <thead className="bg-[#F9FBFC]">
-                <tr>
-                  {columns.map((item, idx) => (
-                    <th key={idx}> {item.Header}</th>
-                  ))}
-                </tr>
-              </thead>
-
-              <tbody className="bg-white border-b border-black ">
-                {data?.map((item, idx) => (
-                  <tr key={idx}>
-                    <td>
-                      {item.user?.firstname} {item.user?.lastname}
-                    </td>
-                    <td>{item.email}</td>
-                    <td className="">
-                      <p className="bg-[#D1E4F8CB] text-[#0981FD]  px-2 py-1 text-center rounded-md">
-                        {" "}
-                        {item.role}
-                      </p>
-                    </td>
+            {isLoading ? (
+              "Loading..."
+            ) : (
+              <table className="w3-table    ">
+                <thead className="bg-[#F9FBFC]">
+                  <tr>
+                    {columns.map((item, idx) => (
+                      <th key={idx}> {item.Header}</th>
+                    ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+
+                <tbody className="bg-white border-b border-black ">
+                  {data?.map((item, idx) => (
+                    <tr key={idx}>
+                      <td>
+                        {item.user?.firstname} {item.user?.lastname}
+                      </td>
+                      <td>{item.email}</td>
+                      <td className="">
+                        <p className="bg-[#D1E4F8CB] text-[#0981FD]  px-2 py-1 text-center rounded-md">
+                          {" "}
+                          {item.role}
+                        </p>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
           <div className="bg-[#F8FBFC] h-9 w-1/2"></div>
         </div>

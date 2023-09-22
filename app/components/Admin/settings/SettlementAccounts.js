@@ -25,6 +25,7 @@ import Toast from "../../Toast";
 const SettlementAccounts = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [toastInfo, setToastInfo] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const closeToast = () => {
     setToastInfo(null);
@@ -62,6 +63,7 @@ const SettlementAccounts = () => {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     axios
       .get(`${AppData.BASE_URL}settings/all-settlement-accounts`, {
         headers: {
@@ -71,6 +73,7 @@ const SettlementAccounts = () => {
       })
       .then(function (response) {
         setAccounts(response);
+        setIsLoading(false);
       })
       .catch(function (error) {});
   }, []);
@@ -100,31 +103,34 @@ const SettlementAccounts = () => {
       <div className="mt-5">
         <p>Settlements Account - 1</p>
         <div className="w-full  w3-responsive">
-          {" "}
-          <table className="w3-table w3-bordered  ">
-            <thead className="bg-[#F9FBFC]">
-              <tr>
-                {columns.map((i, idx) => (
-                  <th key={idx}>{i.Header}</th>
-                ))}
-              </tr>
-            </thead>
-
-            <tbody className="bg-white">
-              {data?.map((item, idx) => (
-                <tr key={idx}>
-                  <td>{item.bank_code}</td>
-                  <td>{item.account_number}</td>
-                  <td>{item.currency}</td>
-                  <div className="flex items-center ">
-                    <button className="text-[#D60000] text-xs">Delete</button>{" "}
-                    <Icon icon="ph:dot" color="#cbcbcb" width={40} />
-                    <button className="text-xs">Edit</button>
-                  </div>
+          {isLoading ? (
+            <p>...Loading</p>
+          ) : (
+            <table className="w3-table w3-bordered  ">
+              <thead className="bg-[#F9FBFC]">
+                <tr>
+                  {columns.map((i, idx) => (
+                    <th key={idx}>{i.Header}</th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+
+              <tbody className="bg-white">
+                {data?.map((item, idx) => (
+                  <tr key={idx}>
+                    <td>{item.bank_code}</td>
+                    <td>{item.account_number}</td>
+                    <td>{item.currency}</td>
+                    <div className="flex items-center ">
+                      <button className="text-[#D60000] text-xs">Delete</button>{" "}
+                      <Icon icon="ph:dot" color="#cbcbcb" width={40} />
+                      <button className="text-xs">Edit</button>
+                    </div>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
       <Modal isOpen={isOpen} onClose={onClose} isCentered>

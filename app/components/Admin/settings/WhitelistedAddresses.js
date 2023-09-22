@@ -21,7 +21,7 @@ import Toast from "../../Toast";
 const WhitelistedAddresses = () => {
   const [message, setMessage] = useState("");
   const [toastInfo, setToastInfo] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(false);
   const [ipData, setIpData] = useState("");
 
   const closeToast = () => {
@@ -56,6 +56,7 @@ const WhitelistedAddresses = () => {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     axios
       .get(`${AppData.BASE_URL}settings/whitelist-ip`, {
         headers: {
@@ -65,6 +66,7 @@ const WhitelistedAddresses = () => {
       })
       .then(function (response) {
         setIpData(response);
+        setIsLoading(false);
       })
       .catch(function (error) {});
     console.log("ran");
@@ -94,18 +96,21 @@ const WhitelistedAddresses = () => {
         <p>Number of Whitelisted IP - 1</p>
         <div className="flex">
           <div className=" w-1/2 w3-responsive">
-            {" "}
-            <table className="w3-table    ">
-              <thead className="bg-[#F9FBFC]">
-                <th>Ip</th>
-              </thead>
+            {isLoading ? (
+              "Loading..."
+            ) : (
+              <table className="w3-table    ">
+                <thead className="bg-[#F9FBFC]">
+                  <th>Ip</th>
+                </thead>
 
-              <tbody>
-                {data?.map((item, idx) => (
-                  <td key={idx}>{item}</td>
-                ))}
-              </tbody>
-            </table>
+                <tbody>
+                  {data?.map((item, idx) => (
+                    <td key={idx}>{item}</td>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
           <div className="bg-[#F8FBFC] h-9 w-1/2"></div>
         </div>

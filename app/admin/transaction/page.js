@@ -10,11 +10,12 @@ import { formatDate } from "@/app/utils/FormatDate";
 
 const Transaction = () => {
   const options = [{ label: "Option 1", value: "option1" }];
+  const [isLoading, setIsLoading] = useState(false);
 
   const [transactions, setTransactions] = useState("");
   console.log(transactions?.data?.data);
   const data = transactions?.data?.data;
-  const [selectedValue, setSelectedValue] = useState(null);
+  const [selectedValue, setSelectedValue] = useState(false);
 
   const handleSelect = (option) => {
     setSelectedValue(option.value);
@@ -23,6 +24,7 @@ const Transaction = () => {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
+    setIsLoading(true);
     axios
       .get(`${AppData.BASE_URL}transactions/history`, {
         headers: {
@@ -30,9 +32,11 @@ const Transaction = () => {
           Authorization: `Bearer ${token}`,
         },
       })
+
       .then(function (response) {
         console.log(response);
         setTransactions(response);
+        setIsLoading(false);
       })
       .catch(function (error) {});
   }, []);
@@ -83,46 +87,54 @@ const Transaction = () => {
       {/* Table */}
       <div className="w-full w3-container w3-responsive">
         {" "}
-        <table className="w3-table w3-bordered  ">
-          <thead className="bg-[#F9FBFC]">
-            <tr>
-              {columns.map((i, idx) => (
-                <th key={idx}>{i.Header}</th>
-              ))}
-            </tr>
-          </thead>
-
-          <tbody className="bg-white w-full text-sm">
-            {data?.map((item, idx) => (
-              <tr key={idx}>
-                <td>
-                  <Icon icon="system-uicons:checkbox-empty" width={30} />
-                </td>
-                <td>{item.email_address}</td>
-                <td>{item.request_type}</td>
-                <td>₦{item.amount}</td>
-                <td>{item.spout_tx_ref}</td>
-                <td>pending</td>
-                <td>{item.redirect_url}</td>
-                <td></td>
-                <td>{formatDate(item.createdAt)}</td>
-                <div className="flex items-center ">
-                  <button>
-                    <Icon
-                      icon="ic:baseline-download"
-                      color="#0b80fa"
-                      width={25}
-                    />
-                  </button>
-
-                  <button className="text-xs">
-                    <Icon icon="icomoon-free:bin" color="#8b8b8b" width={25} />
-                  </button>
-                </div>
+        {isLoading ? (
+          <p>...Loading</p>
+        ) : (
+          <table className="w3-table w3-bordered  ">
+            <thead className="bg-[#F9FBFC]">
+              <tr>
+                {columns.map((i, idx) => (
+                  <th key={idx}>{i.Header}</th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody className="bg-white w-full text-sm">
+              {data?.map((item, idx) => (
+                <tr key={idx}>
+                  <td>
+                    <Icon icon="system-uicons:checkbox-empty" width={30} />
+                  </td>
+                  <td>{item.email_address}</td>
+                  <td>{item.request_type}</td>
+                  <td>₦{item.amount}</td>
+                  <td>{item.spout_tx_ref}</td>
+                  <td>pending</td>
+                  <td>{item.redirect_url}</td>
+                  <td></td>
+                  <td>{formatDate(item.createdAt)}</td>
+                  <div className="flex items-center ">
+                    <button>
+                      <Icon
+                        icon="ic:baseline-download"
+                        color="#0b80fa"
+                        width={25}
+                      />
+                    </button>
+
+                    <button className="text-xs">
+                      <Icon
+                        icon="icomoon-free:bin"
+                        color="#8b8b8b"
+                        width={25}
+                      />
+                    </button>
+                  </div>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );

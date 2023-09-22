@@ -11,7 +11,7 @@ const Switches = () => {
   console.log(id);
   const [toastInfo, setToastInfo] = useState(null);
   const [switches, setSwitches] = useState();
-  const [toggle, setToggle] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const data = switches?.data?.data;
 
@@ -46,6 +46,7 @@ const Switches = () => {
   };
 
   useEffect(() => {
+    setLoading(true);
     axios
       .get(`${AppData.BASE_URL}settings/all-switch`, {
         headers: {
@@ -55,6 +56,7 @@ const Switches = () => {
       })
       .then(function (response) {
         setSwitches(response);
+        setLoading(false);
       })
       .catch(function (error) {});
   }, [token]);
@@ -74,29 +76,33 @@ const Switches = () => {
 
       <p className="text-[#DD7F00] ">You can only select one at a time</p>
       <form action="" onSubmit={handleSubmit(handleSwitch)}>
-        <div className="flex items-center gap-7 mt-10">
-          {data?.map((item, index) => (
-            <button
-              type="submit"
-              name="status"
-              id="status"
-              {...register("status")}
-              onClick={() => {
-                setValue("status", true);
-                setId(item._id);
-              }}
-              key={index}
-              className={`border-[1.5px] ${
-                item.status == true
-                  ? "border-[#075A43] bg-[#E2F4EF]"
-                  : "border-[#000000] bg-[#ADADAD80]"
-              }  flex flex-col items-start w-[10rem] rounded-md p-3`}
-            >
-              <p>{item.status == false ? "Off" : "On"}</p>
-              <p className="font-semibold text-lg">{item.name}</p>
-            </button>
-          ))}
-        </div>
+        {loading ? (
+          "...Loading"
+        ) : (
+          <div className="flex items-center gap-7 mt-10">
+            {data?.map((item, index) => (
+              <button
+                type="submit"
+                name="status"
+                id="status"
+                {...register("status")}
+                onClick={() => {
+                  setValue("status", true);
+                  setId(item._id);
+                }}
+                key={index}
+                className={`border-[1.5px] ${
+                  item.status == true
+                    ? "border-[#075A43] bg-[#E2F4EF]"
+                    : "border-[#000000] bg-[#ADADAD80]"
+                }  flex flex-col items-start w-[10rem] rounded-md p-3`}
+              >
+                <p>{item.status == false ? "Off" : "On"}</p>
+                <p className="font-semibold text-lg">{item.name}</p>
+              </button>
+            ))}
+          </div>
+        )}
       </form>
       {toastInfo && (
         <Toast
