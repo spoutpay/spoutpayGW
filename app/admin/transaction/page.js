@@ -4,21 +4,53 @@ import Dropdown from "@/app/components/Admin/DropdownComponent";
 import InputWithIcon from "@/app/components/Admin/InputWithIcon";
 import { Icon } from "@iconify/react";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import AppData from "../../config/appData.json";
 import { formatDate } from "@/app/utils/FormatDate";
 
 const Transaction = () => {
   const options = [{ label: "Option 1", value: "option1" }];
-  const [isLoading, setIsLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [isLoading, setIsLoading] = useState();
+  const [searchTerm, setSearchTerm] = useState("");
 
   const [transactions, setTransactions] = useState("");
-  console.log(transactions?.data?.data);
+
   const data = transactions?.data?.data;
+  const [filteredData, setFilteredData] = useState(data);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+
+  const endIndex = startIndex + itemsPerPage;
+
+  const dataToDisplay = filteredData?.slice(startIndex, endIndex);
   const [selectedValue, setSelectedValue] = useState(false);
+
+  useEffect(() => {
+    const results = data?.filter(
+      (row) =>
+        row.email_address.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.request_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.spout_tx_ref.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredData(results);
+  }, [searchTerm, data]);
 
   const handleSelect = (option) => {
     setSelectedValue(option.value);
+  };
+
+  const handlePreviousClick = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  // Function to handle "Next" button click
+  const handleNextClick = () => {
+    if (endIndex < data?.length) {
+      setCurrentPage(currentPage + 1);
+    }
   };
 
   const token = localStorage.getItem("token");
@@ -36,10 +68,67 @@ const Transaction = () => {
       .then(function (response) {
         console.log(response);
         setTransactions(response);
+        setItemsPerPage(itemsPerPage);
         setIsLoading(false);
       })
       .catch(function (error) {});
   }, []);
+
+  const Table = useMemo(
+    () => (
+      <>
+        {isLoading ? (
+          <p>...Loading</p>
+        ) : (
+          <table className="w3-table w3-bordered  ">
+            <thead className="bg-[#F9FBFC]">
+              <tr>
+                {columns.map((i, idx) => (
+                  <th key={idx}>{i.Header}</th>
+                ))}
+              </tr>
+            </thead>
+
+            <tbody className="bg-white w-full text-sm">
+              {dataToDisplay?.map((row, idx) => (
+                <tr key={idx}>
+                  <td>
+                    <Icon icon="system-uicons:checkbox-empty" width={30} />
+                  </td>
+                  <td>{row.email_address}</td>
+                  <td>{row.request_type}</td>
+                  <td>₦{row.amount}</td>
+                  <td>{row.spout_tx_ref}</td>
+                  <td>pending</td>
+                  <td>{row.redirect_url}</td>
+                  <td></td>
+                  <td>{formatDate(row.createdAt)}</td>
+                  <div className="flex items-center ">
+                    <button>
+                      <Icon
+                        icon="ic:baseline-download"
+                        color="#0b80fa"
+                        width={25}
+                      />
+                    </button>
+
+                    <button className="text-xs">
+                      <Icon
+                        icon="icomoon-free:bin"
+                        color="#8b8b8b"
+                        width={25}
+                      />
+                    </button>
+                  </div>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </>
+    ),
+    [dataToDisplay]
+  );
 
   return (
     <div className="">
@@ -67,11 +156,15 @@ const Transaction = () => {
             className={""}
             title={"This Month"}
           />
+
           <InputWithIcon
             icon={"material-symbols:search"}
             placeholder="Search for reference"
             color={"#0B80FA"}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
+          {/* <input type="text" placeholder="Search by name or email" /> */}
         </div>
         <div>
           <ButtonWithIcon
@@ -86,55 +179,26 @@ const Transaction = () => {
       </div>
       {/* Table */}
       <div className="w-full w3-container w3-responsive">
-        {" "}
-        {isLoading ? (
-          <p>...Loading</p>
-        ) : (
-          <table className="w3-table w3-bordered  ">
-            <thead className="bg-[#F9FBFC]">
-              <tr>
-                {columns.map((i, idx) => (
-                  <th key={idx}>{i.Header}</th>
-                ))}
-              </tr>
-            </thead>
-
-            <tbody className="bg-white w-full text-sm">
-              {data?.map((item, idx) => (
-                <tr key={idx}>
-                  <td>
-                    <Icon icon="system-uicons:checkbox-empty" width={30} />
-                  </td>
-                  <td>{item.email_address}</td>
-                  <td>{item.request_type}</td>
-                  <td>₦{item.amount}</td>
-                  <td>{item.spout_tx_ref}</td>
-                  <td>pending</td>
-                  <td>{item.redirect_url}</td>
-                  <td></td>
-                  <td>{formatDate(item.createdAt)}</td>
-                  <div className="flex items-center ">
-                    <button>
-                      <Icon
-                        icon="ic:baseline-download"
-                        color="#0b80fa"
-                        width={25}
-                      />
-                    </button>
-
-                    <button className="text-xs">
-                      <Icon
-                        icon="icomoon-free:bin"
-                        color="#8b8b8b"
-                        width={25}
-                      />
-                    </button>
-                  </div>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+        {Table}
+        <div className="mt-10 flex justify-end ">
+          <button
+            onClick={handlePreviousClick}
+            disabled={currentPage === 1}
+            className="border-2 border-[#DEE2E6] px-5 py-2"
+          >
+            Previous
+          </button>
+          <span className="border-2 border-[#DEE2E6] px-5 py-2">
+            Page {currentPage}
+          </span>
+          <button
+            onClick={handleNextClick}
+            disabled={endIndex >= data?.length}
+            className="border-2 border-[rgb(222,226,230)] px-5 py-2"
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -181,241 +245,7 @@ const columns = [
   {
     Header: "Download",
     accessor: "download",
-    Cell: ({ row }) => (
-      <div className="flex items-center gap-3">
-        {" "}
-        <Icon icon="ic:baseline-download" color="#0981fd" width={25} />{" "}
-        <Icon icon="icomoon-free:bin" width={25} />{" "}
-      </div>
-    ),
   },
 ];
 
-const data = [
-  {
-    customer_id: "customer1@example.com",
-    channel: "Online",
-    ammount: "$100",
-    receipt_number: "12345",
-    status: (
-      <div className="flex items-center ">
-        <Icon icon="radix-icons:dot-filled" color="#179800" width={25} />
-        <p>Successful</p>
-      </div>
-    ),
-    payment_page: "PaymentPage1",
-    terminal_id: "T123",
-    date: "2023-08-13 10:00 AM",
-  },
-  {
-    customer_id: "customer2@example.com",
-    channel: "In-Store",
-    ammount: "$50",
-    receipt_number: "67890",
-    status: (
-      <div className="flex items-center ">
-        <Icon icon="radix-icons:dot-filled" color="#179800" width={25} />
-        <p>Successful</p>
-      </div>
-    ),
-    payment_page: "PaymentPage2",
-    terminal_id: "T234",
-    date: "2023-08-13 02:30 PM",
-  },
-  {
-    customer_id: "customer3@example.com",
-    channel: "Online",
-    ammount: "$200",
-    receipt_number: "54321",
-    status: (
-      <div className="flex items-center ">
-        <Icon icon="radix-icons:dot-filled" color="#FF0027" width={25} />
-        <p>Failed</p>
-      </div>
-    ),
-    payment_page: "PaymentPage1",
-    terminal_id: "T123",
-    date: "2023-08-14 09:15 AM",
-  },
-  {
-    customer_id: "customer4@example.com",
-    channel: "In-Store",
-    ammount: "$75",
-    receipt_number: "98765",
-    status: (
-      <div className="flex items-center ">
-        <Icon icon="radix-icons:dot-filled" color="#8D4511" width={25} />
-        <p>Abandoned</p>
-      </div>
-    ),
-    payment_page: "PaymentPage2",
-    terminal_id: "T234",
-    date: "2023-08-15 03:45 PM",
-  },
-  {
-    customer_id: "customer5@example.com",
-    channel: "Online",
-    ammount: "$150",
-    receipt_number: "56789",
-    status: (
-      <div className="flex items-center ">
-        <Icon icon="radix-icons:dot-filled" color="#A40EC7" width={25} />
-        <p>Reversed</p>
-      </div>
-    ),
-    payment_page: "PaymentPage1",
-    terminal_id: "T123",
-    date: "2023-08-16 11:30 AM",
-  },
-  {
-    customer_id: "customer1@example.com",
-    channel: "Online",
-    ammount: "$100",
-    receipt_number: "12345",
-    status: (
-      <div className="flex items-center ">
-        <Icon icon="radix-icons:dot-filled" color="#A40EC7" width={25} />
-        <p>Reversed</p>
-      </div>
-    ),
-    payment_page: "PaymentPage1",
-    terminal_id: "T123",
-    date: "2023-08-13 10:00 AM",
-  },
-  {
-    customer_id: "customer2@example.com",
-    channel: "In-Store",
-    ammount: "$50",
-    receipt_number: "67890",
-    status: (
-      <div className="flex items-center ">
-        <Icon icon="radix-icons:dot-filled" color="#8D4511" width={25} />
-        <p>Abandoned</p>
-      </div>
-    ),
-    payment_page: "PaymentPage2",
-    terminal_id: "T234",
-    date: "2023-08-13 02:30 PM",
-  },
-  {
-    customer_id: "customer3@example.com",
-    channel: "Online",
-    ammount: "$200",
-    receipt_number: "54321",
-    status: (
-      <div className="flex items-center ">
-        <Icon icon="radix-icons:dot-filled" color="#8D4511" width={25} />
-        <p>Abandoned</p>
-      </div>
-    ),
-    payment_page: "PaymentPage1",
-    terminal_id: "T123",
-    date: "2023-08-14 09:15 AM",
-  },
-  {
-    customer_id: "customer4@example.com",
-    channel: "In-Store",
-    ammount: "$75",
-    receipt_number: "98765",
-    status: (
-      <div className="flex items-center ">
-        <Icon icon="radix-icons:dot-filled" color="#FF0027" width={25} />
-        <p>Failed</p>
-      </div>
-    ),
-    payment_page: "PaymentPage2",
-    terminal_id: "T234",
-    date: "2023-08-15 03:45 PM",
-  },
-  {
-    customer_id: "customer5@example.com",
-    channel: "Online",
-    ammount: "$150",
-    receipt_number: "56789",
-    status: (
-      <div className="flex items-center ">
-        <Icon icon="radix-icons:dot-filled" color="#FF0027" width={25} />
-        <p>Failed</p>
-      </div>
-    ),
-    payment_page: "PaymentPage1",
-    terminal_id: "T123",
-    date: "2023-08-16 11:30 AM",
-  },
-  {
-    customer_id: "customer1@example.com",
-    channel: "Online",
-    ammount: "$100",
-    receipt_number: "12345",
-    status: (
-      <div className="flex items-center ">
-        <Icon icon="radix-icons:dot-filled" color="#179800" width={25} />
-        <p>Successful</p>
-      </div>
-    ),
-    payment_page: "PaymentPage1",
-    terminal_id: "T123",
-    date: "2023-08-13 10:00 AM",
-  },
-  {
-    customer_id: "customer2@example.com",
-    channel: "In-Store",
-    ammount: "$50",
-    receipt_number: "67890",
-    status: (
-      <div className="flex items-center ">
-        <Icon icon="radix-icons:dot-filled" color="#FF0027" width={25} />
-        <p>Failed</p>
-      </div>
-    ),
-    payment_page: "PaymentPage2",
-    terminal_id: "T234",
-    date: "2023-08-13 02:30 PM",
-  },
-  {
-    customer_id: "customer3@example.com",
-    channel: "Online",
-    ammount: "$200",
-    receipt_number: "54321",
-    status: (
-      <div className="flex items-center ">
-        <Icon icon="radix-icons:dot-filled" color="#FF0027" width={25} />
-        <p>Failed</p>
-      </div>
-    ),
-    payment_page: "PaymentPage1",
-    terminal_id: "T123",
-    date: "2023-08-14 09:15 AM",
-  },
-  {
-    customer_id: "customer4@example.com",
-    channel: "In-Store",
-    ammount: "$75",
-    receipt_number: "98765",
-    status: (
-      <div className="flex items-center ">
-        <Icon icon="radix-icons:dot-filled" color="#FF0027" width={25} />
-        <p>Failed</p>
-      </div>
-    ),
-    payment_page: "PaymentPage2",
-    terminal_id: "T234",
-    date: "2023-08-15 03:45 PM",
-  },
-  {
-    customer_id: "customer5@example.com",
-    channel: "Online",
-    ammount: "$150",
-    receipt_number: "56789",
-    status: (
-      <div className="flex items-center ">
-        <Icon icon="radix-icons:dot-filled" color="#179800" width={25} />
-        <p>Successful</p>
-      </div>
-    ),
-    payment_page: "PaymentPage1",
-    terminal_id: "T123",
-    date: "2023-08-16 11:30 AM",
-  },
-];
 export default Transaction;

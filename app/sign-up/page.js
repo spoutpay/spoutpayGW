@@ -5,24 +5,28 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import Button from "./components/Button";
-import InputField from "./components/InputField";
-import AppData from "./config/appData.json";
+import Button from "../components/Button";
+import InputField from "../components/InputField";
+import AppData from "../config/appData.json";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
 const schema = yup.object().shape({
+  firstname: yup.string().required("First Name is required!"),
+  lastname: yup.string().required("Last Name is required!"),
   email: yup
     .string()
     .email("Enter a valid Email Address")
     .required("Email is required!"),
   password: yup.string().required("Password is required!"),
+  role: yup.string().required("Role is required!"),
 });
 
-const LoginForm = () => {
+const SignUp = () => {
   const [message, setMessage] = useState("");
   const router = useRouter();
+  const token = localStorage.getItem("token");
 
   const {
     register,
@@ -34,14 +38,15 @@ const LoginForm = () => {
 
   const handleLogin = async (requestData) => {
     try {
-      const endpoint = `${AppData.BASE_URL}auth/login`;
+      const endpoint = `${AppData.BASE_URL}auth/signup`;
       const response = await axios.post(endpoint, requestData, {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
-      localStorage.setItem("token", response.data.data.token);
-      router.push("/admin");
+
+      router.push("/");
     } catch (error) {
       console.log("Error", error);
       setMessage(error.response?.data?.error || "An error occurred");
@@ -62,11 +67,34 @@ const LoginForm = () => {
         <p className="text-[#BEBEBE] mb-5">Enter your details to login</p>
         <form
           onSubmit={handleSubmit(handleLogin)}
-          className=" border p-16 rounded-xl border-[#060D27] w-[450px] "
+          className=" border p-16 rounded-xl border-[#060D27] w-[500px] "
         >
           {message && (
             <small className="mt-3 mb-3 text-red-500">{message}</small>
           )}
+
+          <div className=" grid grid-cols-2 gap-2 mb-2">
+            <span>
+              <label htmlFor="" className="">
+                First Name
+              </label>
+              <InputField
+                type="text"
+                name="firstname"
+                register={register}
+                error={errors.firstname?.message}
+              />
+            </span>
+            <span>
+              <label htmlFor="">Last Name</label>
+              <InputField
+                type="text"
+                name="lastname"
+                register={register}
+                error={errors.lastname?.message}
+              />
+            </span>
+          </div>
           <label htmlFor="" className="">
             Email
           </label>
@@ -77,6 +105,17 @@ const LoginForm = () => {
             name="email"
             register={register}
             error={errors.email?.message}
+          />
+          <label htmlFor="" className="">
+            Role
+          </label>
+          <InputField
+            type="rold"
+            placeholder="email@gmail.com"
+            wrapClass="relative mt-3 mb-3 "
+            name="role"
+            register={register}
+            error={errors.role?.message}
           />
           <label htmlFor="" className="">
             Password
@@ -95,7 +134,7 @@ const LoginForm = () => {
           <p className="text-[#BEBEBE] text-center mt-20">
             Are you new here?{" "}
             <Link href="/sign-up" className="font-bold text-black">
-              Sign Up
+              Sign in
             </Link>
           </p>
         </form>
@@ -129,4 +168,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default SignUp;

@@ -16,7 +16,9 @@ const Layout = ({ children }) => {
       </div>
 
       <div className="grid md:grid-cols-sidebar mt-3  bg-[#F5F5F5]">
-        <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
+        <div className="overflow-hidden">
+          <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
+        </div>
         <div className="overflow-auto bg-white">
           <Providers>{children}</Providers>
         </div>

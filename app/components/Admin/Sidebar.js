@@ -15,7 +15,7 @@ const Sidebar = ({ open, setOpen }) => {
   return (
     <div
       className={classNames({
-        "flex flex-col justify-between text-hoss": true, // layout
+        "flex flex-col justify-between text-hoss overflow-none": true, // layout
         "bg-[#060D27] ": true, // colors
         "md:w-full md:sticky md:top-16 md:z-0 top-0 z-20 fixed": true, // positioning
         "h-full w-[300px]": true, // for height and width
@@ -24,9 +24,9 @@ const Sidebar = ({ open, setOpen }) => {
       })}
       ref={ref}
     >
-      <nav className="md:sticky top-0 md:top-16">
+      <nav className="md:sticky top-0 ">
         {/* nav items */}
-        <ul className=" pl-5 flex flex-col gap-2  mt-10">
+        <ul className=" pl-5 flex flex-col gap-2  mt-5">
           {navItems.map((item, index) => {
             return (
               <>

@@ -102,7 +102,7 @@ function LineChart() {
           font: {
             size: 30,
             style: "italic",
-            family: "Arial", 
+            family: "Arial",
           },
         },
       },
@@ -112,7 +112,7 @@ function LineChart() {
   return (
     <div className=" bg-white rounded-md m-5 ">
       <div
-        className="w-full flex h-[500px] justify-center"
+        className="w-full flex justify-center"
         // style={{
         //   width: "100%",
         //   height: "500px",
