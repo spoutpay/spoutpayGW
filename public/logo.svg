@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="67" viewBox="0 0 130 67">
+  <g id="Group_2621" data-name="Group 2621" transform="translate(-38 -319)">
+    <g id="Group_1902" data-name="Group 1902" transform="translate(-752.49 -1503.836)">
+      <text id="Spout" transform="translate(790.49 1863.836)" fill="#060d27" font-size="20" font-family="HossRound-Bold, Hoss Round" font-weight="700"><tspan x="0" y="0">SPOUT</tspan></text>
+      <g id="Group_1897" data-name="Group 1897" transform="translate(866.535 1822.883)">
+        <circle id="Ellipse_38" data-name="Ellipse 38" cx="32" cy="32" r="32" transform="translate(-10.045 -0.047)" fill="#060d27"/>
+        <text id="Pay" transform="translate(-3.045 42.953)" fill="#fff" font-size="30" font-family="HossRound-Regular, Hoss Round"><tspan x="0" y="0">Pay</tspan></text>
+      </g>
+    </g>
+    <text id="admin" transform="translate(38 382)" fill="#7e7e7e" font-size="18" font-family="HossRound-Light, Hoss Round" font-weight="300"><tspan x="0" y="0">ADMIN</tspan></text>
+  </g>
+</svg>

@@ -3,8 +3,8 @@ import cardReducer from "./features/cardSlice";
 import switchReducer from "./features/switchSlice";
 
 export default configureStore({
-    reducer: {
-        card: cardReducer,
-        switch: switchReducer,
-    },
-})
+  reducer: {
+    card: cardReducer,
+    switch: switchReducer,
+  },
+});

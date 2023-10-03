@@ -9,6 +9,8 @@ const Button = ({ text, onClick, variant, buttonType }) => {
         return "bg-tulip hover:bg-tulip text-white";
       case "transparent":
         return "bg-transparent border hover:bg-transparent text-gray-500 hover:text-gray-600";
+      case "dark":
+        return "bg-[#060D27] border hover:bg-[#060D27] text-white hover:text-white";
       default:
         return "bg-gray-500 hover:bg-gray-600 text-white";
     }

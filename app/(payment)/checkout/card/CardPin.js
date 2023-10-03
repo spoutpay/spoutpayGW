@@ -96,7 +96,7 @@ export default function CardPin({ customer }) {
   };
 
   return (
-    <div className="text-center text-center mt-16">
+    <div className=" text-center mt-16">
       <form
         className={
           errors.pin ? "otp-inputs error ml-24 w-3/5" : "otp-inputs ml-24 w-3/5"
