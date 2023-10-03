@@ -1,29 +1,42 @@
 "use client";
 
 import { useSelector, useDispatch } from "react-redux";
-import { cardDataResponse } from "../../redux/features/cardSlice";
+import { cardDataResponse } from "../../../redux/features/cardSlice";
 import Button from "@/app/components/Button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import OTPInput from "react-otp-input";
-import AppData from "../../config/appData.json";
+import AppData from "../../../config/appData.json";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
-export default function CardPin({ cardType }) {
+export default function CardPin({ customer }) {
   const router = useRouter();
+  const routeParam = useSearchParams();
+  const param = routeParam.get("txn_ref");
   const cardInfo = useSelector((state) => state.card.value.cardData);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [otp, setOtp] = useState("");
   const { pan, expDate, cvv } = cardInfo;
-  const amount = "80";
-  const email = "onomeofogba@gmail.com";
-  const phoneNum = "08103327651";
-  const currency = "NGN";
-  const name = "Onome Ofogba";
+  // const [customer, setCustomer] = useState({});
+
+  console.log("customer", customer);
+
+  const {
+    amount,
+    currency,
+    customer_name,
+    email_address,
+    phone_number,
+    request_type,
+    user_bear_charge,
+    spout_tx_ref,
+    description,
+    isVisa,
+  } = customer;
 
   const cleanedExpDate = expDate?.replace(/\s|\/+/g, "");
   const cleanedPan = pan?.replace(/\s|\/+/g, "");
@@ -36,17 +49,17 @@ export default function CardPin({ cardType }) {
     expDate: yup.string().default(cleanedExpDate),
     cvv: yup.string().default(cvv),
     pin: yup.string().required("Enter pin to continue").min(4).default(otp),
-    customer_name: yup.string().default(name),
+    customer_name: yup.string().default(customer_name),
     email_address: yup
       .string()
       .email("Enter a valid email address")
-      .default(email),
+      .default(email_address),
     phone_number: yup
       .string()
       .matches(phoneRegExp, "Phone number is not valid!")
-      .default(phoneNum),
+      .default(phone_number),
     currency: yup.string().default(currency),
-    amount: yup.string().default(amount),
+    amount: yup.number().default(amount),
   });
 
   const {
@@ -61,6 +74,7 @@ export default function CardPin({ cardType }) {
   const initiateCardTransaction = async (requestData) => {
     const endpoint = `${AppData.BASE_URL}interswitch/access`;
 
+    console.log("requestr data", requestData);
     try {
       setLoading(true);
       const response = await axios.post(endpoint, requestData, {
@@ -69,10 +83,10 @@ export default function CardPin({ cardType }) {
         },
       });
       dispatch(cardDataResponse(response.data));
-      if (cardType !== "Visa") {
-        router.push("/checkout/otpverifier");
-      } else {
+      if (isVisa) {
         router.push("/checkout/visaverifier");
+      } else {
+        router.push("/checkout/otpverifier");
       }
     } catch (error) {
       console.error("Error:", error.message);

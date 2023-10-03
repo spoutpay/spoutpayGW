@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 // Constants
 const CARD_TYPES = {
@@ -7,8 +7,8 @@ const CARD_TYPES = {
   Visa: "/visa.png",
 };
 
-import { updateCardData } from "../redux/features/cardSlice";
-import { updateSwitchConfig } from "../redux/features/switchSlice";
+import { updateCardData } from "../../redux/features/cardSlice";
+import { updateSwitchConfig } from "../../redux/features/switchSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -24,10 +24,11 @@ import isValidExpiry from "@/app/utils/ValidateExpiryDate";
 import Image from "next/image";
 import Button from "@/app/components/Button";
 import CardPin from "./card/CardPin";
-import AppData from "../config/appData.json";
+import AppData from "../../config/appData.json";
 import axios from "axios";
 import Upsl from "./card/Upsl";
 import CryptoJS from "crypto-js";
+import { useSearchParams } from "next/navigation";
 
 const inputClassNames =
   "w-full border px-2.5 pt-6 pb-2.5 rounded text-xs text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-input-focus";
@@ -45,7 +46,9 @@ export default function Checkout() {
   const [cardNumber, setCardNumber] = useState("");
   const [cardType, setCardType] = useState("");
   const [enterPin, setEnterpin] = useState(false);
-  const router = useRouter();
+  const [customer, setCustomer] = useState({});
+  const router = useSearchParams();
+  const param = router.get("txn_ref");
 
   const [encryptedText, setEncryptedText] = useState("");
   const secretKey = "16CharacterKey!!";
@@ -110,7 +113,7 @@ export default function Checkout() {
   });
 
   const submitUpslData = async (data) => {
-    console.log("upsl data", data)
+    // console.log("upsl data", data);
     const endpoint = `${AppData.BASE_URL}upsl/process`;
     let offset = new Date().getTimezoneOffset();
     let w = window.innerWidth;
@@ -151,7 +154,7 @@ export default function Checkout() {
       });
 
       dispatch(updateCardData(response.data));
-      console.log("response data", response.data)
+      // console.log("response data", response.data);
       setResponseData(response.data);
       setEnterpin(true);
     } catch (error) {
@@ -174,11 +177,32 @@ export default function Checkout() {
     }
   };
 
+  console.log("switch type", switchName)
+
   const onSubmit = async (data) => {
     if (switchName === "upsl") {
       await submitUpslData(data);
     } else {
       await submitISWData(data);
+    }
+  };
+
+  const retrieveInitialTransaction = async () => {
+    try {
+      if (param) {
+        const endpoint = `${AppData.BASE_URL}transactions/initialize/${param}`;
+        const { data } = await axios.get(endpoint, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        // console.log("res", data.data);
+        setCustomer(data.data);
+      } else {
+        console.log("param is missing or falsy.");
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -189,6 +213,10 @@ export default function Checkout() {
   useEffect(() => {
     localStorage.setItem("encryptedData", encryptedText);
   }, [encryptedText]);
+
+  useEffect(() => {
+    retrieveInitialTransaction();
+  }, []);
 
   return (
     <div className="flex item-center text-center justify-center mt-8">
@@ -264,7 +292,7 @@ export default function Checkout() {
             </div>
           </div>
           <Button
-            text={loading ? "Loading..." : `Pay NGN ${amount}`}
+            text={loading ? "Loading..." : `Pay NGN ${customer?.amount}`}
             variant="tulip"
             type="submit"
             disabled={loading}
@@ -272,7 +300,11 @@ export default function Checkout() {
         </form>
       ) : (
         <>
-          {switchName === "upsl" ? <Upsl response={responseData} /> : <CardPin cardType={cardType} />}
+          {switchName === "upsl" ? (
+            <Upsl response={responseData} />
+          ) : (
+            <CardPin cardType={cardType} customer={customer}/>
+          )}
         </>
       )}
     </div>

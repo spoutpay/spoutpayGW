@@ -6,18 +6,17 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import OTPInput from "react-otp-input";
-import AppData from "../../config/appData.json";
+import AppData from "../../../config/appData.json";
 import axios from "axios";
-import Button from "../../components/Button";
-import Status from "../status/Status";
+import Button from "../../../components/Button";
+import { useRouter } from "next/navigation";
 
 export default function OtpVerifier() {
+  const router = useRouter();
   const response = useSelector((state) => state.card.apiResponse?.data ?? null);
   const requestAmount = "80";
   const [loading, setLoading] = useState(false);
   const [otp, setOtp] = useState("");
-  const [isProccessed, setIsProcessed] = useState(false);
-  const [processedMsg, setProcessedMsg] = useState("");
 
   let message, paymentId, plainTextSupportMessage, transactionRef;
 
@@ -51,20 +50,18 @@ export default function OtpVerifier() {
           "Content-Type": "application/json",
         },
       });
-      setProcessedMsg("success");
-      setIsProcessed(true);
+      router.push("/success");
     } catch (error) {
-      setProcessedMsg("failed");
-      setIsProcessed(true);
       console.error("Error:", error.message);
+      router.push("/failed");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="text-center flex mt-16 justify-center items-center">
-      {!isProccessed ? (
+    <>
+      <div className="text-center flex mt-16 justify-center items-center">
         <form
           className={errors.pin ? "otp-inputs error w-3/5" : "otp-inputs w-3/5"}
           onSubmit={handleSubmit(confirmOtp)}
@@ -94,9 +91,7 @@ export default function OtpVerifier() {
             <p className="mt-6 text-xs">{plainTextSupportMessage}</p>
           )}
         </form>
-      ) : (
-        <Status message={processedMsg} />
-      )}
-    </div>
+      </div>
+    </>
   );
 }
